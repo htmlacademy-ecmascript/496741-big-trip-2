@@ -1,7 +1,7 @@
 # Проект «Большое путешествие»
 
 * Студент: [Вагиза Свидченкова](https://up.htmlacademy.ru/ecmascript-individual/2/user/496741).
-* Наставник: `Неизвестно`.
+* Наставник: [Роман Марченко](https://htmlacademy.ru/profile/id505487).
 
 ---
 
