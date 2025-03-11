@@ -1,12 +1,12 @@
 import { createElement } from '../render';
 
-function createItemTripTemplate() {
-  return '<li class="trip-events__item"></li>';
+function createFailedLoadTemplate() {
+  return '<p class="trip-events__msg">Failed to load latest route information</p>';
 }
 
-export default class ItemTripView {
+export default class FailedLoadView {
   getTemplate() {
-    return createItemTripTemplate();
+    return createFailedLoadTemplate();
   }
 
   getElement() {
