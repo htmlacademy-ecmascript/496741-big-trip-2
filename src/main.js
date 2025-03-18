@@ -1,8 +1,9 @@
-import BoardPresenter from './presenter/board-presenter';
 import { render } from './render';
 import ButtonFilterView from './view/button-filter-view';
 import ItemFilterView from './view/item-filter-view';
 import ListFilterView from './view/list-filter-view';
+import BoardPresenter from './presenter/board-presenter';
+import PointsModel from './model/points-model';
 
 const pageHeaderElement = document.querySelector('.page-header');
 const pageMainElement = document.querySelector('.page-main');
@@ -16,6 +17,10 @@ for (let i = 0; i < 4; i++) {
 }
 render(new ButtonFilterView, listFilterComponent.getElement());
 
-const boardPresenter = new BoardPresenter({boardContainer: pageMainElement});
+const pointsModel = new PointsModel();
+const boardPresenter = new BoardPresenter({
+  boardContainer: pageMainElement,
+  pointsModel
+});
 
 boardPresenter.init();
