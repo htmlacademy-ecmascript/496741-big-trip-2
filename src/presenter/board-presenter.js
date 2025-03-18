@@ -34,7 +34,7 @@ export default class BoardPresenter {
     for (let i = 0; i < this.boardPoints.length; i++) {
       const point = {...this.boardPoints[i]};
       point.destination = this.destinations.find((itemDestination) => itemDestination.id === point.destination);
-      render(new ItemTripView({point: point}), this.listTripComponent.getElement());
+      render(new ItemTripView({point}), this.listTripComponent.getElement());
     }
   }
 }
