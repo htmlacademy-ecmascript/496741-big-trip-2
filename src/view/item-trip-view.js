@@ -11,7 +11,6 @@ function createItemTripTemplate(point) {
       name,
     },
     isFavorite,
-    offers,
     type
   } = point;
 
