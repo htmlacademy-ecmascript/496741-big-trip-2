@@ -19,8 +19,8 @@ const mockPoints = [
   {
     id: 'f4b62099-293f-4c3d-a702-94eec4a2802c',
     basePrice: 2000,
-    dateFrom: '2019-07-10T22:55:56.845Z',
-    dateTo: '2019-07-11T11:22:13.375Z',
+    dateFrom: '2019-03-10T02:55:56.845Z',
+    dateTo: '2019-03-11T11:22:13.375Z',
     destination: 'bfa5cb75-a1fe-4b77-a83c-0e528e910e02',
     isFavorite: false,
     offers: [
@@ -32,10 +32,10 @@ const mockPoints = [
   {
     id: 'f4b62099-293f-4c3d-a702-94eec4a2803c',
     basePrice: 1000,
-    dateFrom: '2019-07-10T22:55:56.845Z',
-    dateTo: '2019-07-11T11:22:13.375Z',
+    dateFrom: '2019-07-01T22:55:56.845Z',
+    dateTo: '2019-07-05T11:20:13.375Z',
     destination: 'bfa5cb75-a1fe-4b77-a83c-0e528e910e03',
-    isFavorite: false,
+    isFavorite: true,
     offers: [
       'b4c3e4e6-9053-42ce-b747-e281314baa33'
     ],
@@ -44,10 +44,10 @@ const mockPoints = [
   {
     id: 'f4b62099-293f-4c3d-a702-94eec4a2803c',
     basePrice: 1500,
-    dateFrom: '2019-07-10T22:55:56.845Z',
-    dateTo: '2019-07-11T11:22:13.375Z',
+    dateFrom: '2019-05-10T22:05:56.845Z',
+    dateTo: '2019-05-11T11:22:13.375Z',
     destination: 'bfa5cb75-a1fe-4b77-a83c-0e528e910e04',
-    isFavorite: false,
+    isFavorite: true,
     offers: [],
     type: getRandomArrayElement(WAYPOINTS).toLowerCase()
   }
