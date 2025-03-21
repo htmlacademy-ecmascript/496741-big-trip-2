@@ -11,10 +11,9 @@ const mockPoints = [
     isFavorite: false,
     offers: [
       'b4c3e4e6-9053-42ce-b747-e281314baa31',
-      'b4c3e4e6-9053-42ce-b747-e281314baa32',
       'b4c3e4e6-9053-42ce-b747-e281314baa33'
     ],
-    type: getRandomArrayElement(WAYPOINTS).toLowerCase()
+    type: WAYPOINTS[0].toLowerCase()
   },
   {
     id: 'f4b62099-293f-4c3d-a702-94eec4a2802c',
@@ -23,11 +22,8 @@ const mockPoints = [
     dateTo: '2019-03-11T11:22:13.375Z',
     destination: 'bfa5cb75-a1fe-4b77-a83c-0e528e910e02',
     isFavorite: false,
-    offers: [
-      'b4c3e4e6-9053-42ce-b747-e281314baa31',
-      'b4c3e4e6-9053-42ce-b747-e281314baa32'
-    ],
-    type: getRandomArrayElement(WAYPOINTS).toLowerCase()
+    offers: [],
+    type: WAYPOINTS[1].toLowerCase()
   },
   {
     id: 'f4b62099-293f-4c3d-a702-94eec4a2803c',
@@ -37,9 +33,12 @@ const mockPoints = [
     destination: 'bfa5cb75-a1fe-4b77-a83c-0e528e910e03',
     isFavorite: true,
     offers: [
-      'b4c3e4e6-9053-42ce-b747-e281314baa33'
+      'b4c3e4e6-9053-42ce-b747-e281314baa34',
+      'b4c3e4e6-9053-42ce-b747-e281314baa35',
+      'b4c3e4e6-9053-42ce-b747-e281314baa36',
+      'b4c3e4e6-9053-42ce-b747-e281314baa37'
     ],
-    type: getRandomArrayElement(WAYPOINTS).toLowerCase()
+    type: WAYPOINTS[2].toLowerCase()
   },
   {
     id: 'f4b62099-293f-4c3d-a702-94eec4a2803c',
@@ -49,8 +48,22 @@ const mockPoints = [
     destination: 'bfa5cb75-a1fe-4b77-a83c-0e528e910e04',
     isFavorite: true,
     offers: [],
-    type: getRandomArrayElement(WAYPOINTS).toLowerCase()
-  }
+    type: WAYPOINTS[5].toLowerCase()
+  },
+  {
+    id: 'f4b62099-293f-4c3d-a702-94eec4a2803c',
+    basePrice: 1500,
+    dateFrom: '2019-05-10T22:05:56.845Z',
+    dateTo: '2019-05-11T11:22:13.375Z',
+    destination: 'bfa5cb75-a1fe-4b77-a83c-0e528e910e04',
+    isFavorite: true,
+    offers: [
+      'b4c3e4e6-9053-42ce-b747-e281314baa38',
+      'b4c3e4e6-9053-42ce-b747-e281314baa41',
+      'b4c3e4e6-9053-42ce-b747-e281314baa42'
+    ],
+    type: WAYPOINTS[5].toLowerCase()
+  },
 ];
 
 const mockDestinations = [
@@ -103,32 +116,77 @@ const mockOffers = [
         id: 'b4c3e4e6-9053-42ce-b747-e281314baa31',
         title: 'Upgrade to a business class',
         price: 120
+      },
+      {
+        id: 'b4c3e4e6-9053-42ce-b747-e281314baa32',
+        title: 'Upgrade to a comfort+',
+        price: 100
+      },
+      {
+        id: 'b4c3e4e6-9053-42ce-b747-e281314baa33',
+        title: 'help with luggage',
+        price: 150
       }
     ]
   },
   {
     type: WAYPOINTS[1].toLowerCase(),
-    offers: [
-      {
-        id: 'b4c3e4e6-9053-42ce-b747-e281314baa32',
-        title: 'Upgrade to a business class',
-        price: 140
-      }
-    ]
+    offers: []
   },
   {
     type: WAYPOINTS[2].toLowerCase(),
     offers: [
       {
-        id: 'b4c3e4e6-9053-42ce-b747-e281314baa33',
-        title: 'Upgrade to a business class',
-        price: 160
+        id: 'b4c3e4e6-9053-42ce-b747-e281314baa34',
+        title: 'personal trainer',
+        price: 100
+      },
+      {
+        id: 'b4c3e4e6-9053-42ce-b747-e281314baa35',
+        title: 'shower set',
+        price: 50
+      },
+      {
+        id: 'b4c3e4e6-9053-42ce-b747-e281314baa36',
+        title: 'sports nutrition',
+        price: 80
+      },
+      {
+        id: 'b4c3e4e6-9053-42ce-b747-e281314baa37',
+        title: 'sauna',
+        price: 40
       }
     ]
   },
   {
-    type: WAYPOINTS[3].toLowerCase(),
-    offers: []
+    type: WAYPOINTS[5].toLowerCase(),
+    offers: [
+      {
+        id: 'b4c3e4e6-9053-42ce-b747-e281314baa38',
+        title: 'chair selection',
+        price: 20
+      },
+      {
+        id: 'b4c3e4e6-9053-42ce-b747-e281314baa39',
+        title: 'dinner',
+        price: 40
+      },
+      {
+        id: 'b4c3e4e6-9053-42ce-b747-e281314baa40',
+        title: 'extra luggage',
+        price: 100
+      },
+      {
+        id: 'b4c3e4e6-9053-42ce-b747-e281314baa41',
+        title: 'Upgrade to a business class',
+        price: 1000
+      },
+      {
+        id: 'b4c3e4e6-9053-42ce-b747-e281314baa42',
+        title: 'pet transportation',
+        price: 50
+      }
+    ]
   }
 ];
 

@@ -2,17 +2,17 @@ import { createElement } from '../render';
 import { findTimeInterval, humanizeDate } from '../utils';
 import { DateFormat } from '../const';
 
-function createItemTripTemplate(point) {
+function createItemTripTemplate(point, destinations) {
   const {
     basePrice,
     dateFrom,
     dateTo,
-    destination: {
-      name,
-    },
+    destination,
     isFavorite,
-    type
+    type,
   } = point;
+
+  const {name} = destinations.find((itemDestination) => itemDestination.id === destination);
 
   const dateFromTime = humanizeDate(dateFrom, DateFormat.TIME);
   const dateFromDate = humanizeDate(dateFrom, DateFormat.DATE);
@@ -30,9 +30,9 @@ function createItemTripTemplate(point) {
       <h3 class="event__title">${type} ${name}</h3>
       <div class="event__schedule">
         <p class="event__time">
-          <time class="event__start-time" datetime="2019-03-18T10:30">${dateFromTime}</time>
+          <time class="event__start-time" datetime="${dateFrom}">${dateFromTime}</time>
           &mdash;
-          <time class="event__end-time" datetime="2019-03-18T11:00">${dateaToTime}</time>
+          <time class="event__end-time" datetime="${dateTo}">${dateaToTime}</time>
         </p>
         <p class="event__duration">${diffTime}</p>
       </div>
@@ -61,12 +61,14 @@ function createItemTripTemplate(point) {
 }
 
 export default class ItemTripView {
-  constructor({point}) {
+  constructor({point, destinations, offers}) {
     this.point = point;
+    this.destinations = destinations;
+    this.offers = offers;
   }
 
   getTemplate() {
-    return createItemTripTemplate(this.point);
+    return createItemTripTemplate(this.point, this.destinations, this.offers);
   }
 
   getElement() {

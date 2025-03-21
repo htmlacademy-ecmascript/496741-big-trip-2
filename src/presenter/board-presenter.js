@@ -23,12 +23,18 @@ export default class BoardPresenter {
 
     render(new ListSortView, tripEventsElement);
     render(this.listTripComponent, tripEventsElement);
-    render(new AddNewPointView, this.listTripComponent.getElement());
-    render(new EditPointView, this.listTripComponent.getElement());
+    //render(new AddNewPointView, this.listTripComponent.getElement());
+    render(new EditPointView({
+      point: this.boardPoints[0],
+      destinations: this.destinations,
+      offers: this.offers
+    }), this.listTripComponent.getElement());
     for (let i = 0; i < this.boardPoints.length; i++) {
-      const point = {...this.boardPoints[i]};
-      point.destination = this.destinations.find((itemDestination) => itemDestination.id === point.destination);
-      render(new ItemTripView({point}), this.listTripComponent.getElement());
+      render(new ItemTripView({
+        point: this.boardPoints[i],
+        destinations: this.destinations,
+        offers: this.offers
+      }), this.listTripComponent.getElement());
     }
   }
 }
