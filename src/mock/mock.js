@@ -13,7 +13,7 @@ const mockPoints = [
       'b4c3e4e6-9053-42ce-b747-e281314baa31',
       'b4c3e4e6-9053-42ce-b747-e281314baa33'
     ],
-    type: WAYPOINTS[0].toLowerCase()
+    type: WAYPOINTS[0]
   },
   {
     id: 'f4b62099-293f-4c3d-a702-94eec4a2802c',
@@ -23,7 +23,7 @@ const mockPoints = [
     destination: 'bfa5cb75-a1fe-4b77-a83c-0e528e910e02',
     isFavorite: false,
     offers: [],
-    type: WAYPOINTS[1].toLowerCase()
+    type: WAYPOINTS[1]
   },
   {
     id: 'f4b62099-293f-4c3d-a702-94eec4a2803c',
@@ -38,20 +38,20 @@ const mockPoints = [
       'b4c3e4e6-9053-42ce-b747-e281314baa36',
       'b4c3e4e6-9053-42ce-b747-e281314baa37'
     ],
-    type: WAYPOINTS[2].toLowerCase()
+    type: WAYPOINTS[2]
   },
   {
-    id: 'f4b62099-293f-4c3d-a702-94eec4a2803c',
+    id: 'f4b62099-293f-4c3d-a702-94eec4a2804c',
     basePrice: 1500,
     dateFrom: '2019-05-10T22:05:56.845Z',
     dateTo: '2019-05-11T11:22:13.375Z',
     destination: 'bfa5cb75-a1fe-4b77-a83c-0e528e910e04',
     isFavorite: true,
     offers: [],
-    type: WAYPOINTS[5].toLowerCase()
+    type: WAYPOINTS[5]
   },
   {
-    id: 'f4b62099-293f-4c3d-a702-94eec4a2803c',
+    id: 'f4b62099-293f-4c3d-a702-94eec4a2805c',
     basePrice: 1500,
     dateFrom: '2019-05-10T22:05:56.845Z',
     dateTo: '2019-05-11T11:22:13.375Z',
@@ -62,7 +62,7 @@ const mockPoints = [
       'b4c3e4e6-9053-42ce-b747-e281314baa41',
       'b4c3e4e6-9053-42ce-b747-e281314baa42'
     ],
-    type: WAYPOINTS[5].toLowerCase()
+    type: WAYPOINTS[5]
   },
 ];
 
@@ -110,7 +110,7 @@ const mockDestinations = [
 
 const mockOffers = [
   {
-    type: WAYPOINTS[0].toLowerCase(),
+    type: WAYPOINTS[0],
     offers: [
       {
         id: 'b4c3e4e6-9053-42ce-b747-e281314baa31',
@@ -130,11 +130,11 @@ const mockOffers = [
     ]
   },
   {
-    type: WAYPOINTS[1].toLowerCase(),
+    type: WAYPOINTS[1],
     offers: []
   },
   {
-    type: WAYPOINTS[2].toLowerCase(),
+    type: WAYPOINTS[2],
     offers: [
       {
         id: 'b4c3e4e6-9053-42ce-b747-e281314baa34',
@@ -159,7 +159,7 @@ const mockOffers = [
     ]
   },
   {
-    type: WAYPOINTS[5].toLowerCase(),
+    type: WAYPOINTS[5],
     offers: [
       {
         id: 'b4c3e4e6-9053-42ce-b747-e281314baa38',

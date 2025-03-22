@@ -3,7 +3,6 @@ import ListSortView from '../view/list-sort-view';
 import ListTripView from '../view/list-trip-view';
 import ItemTripView from '../view/item-trip-view';
 import EditPointView from '../view/edit-point-view';
-import AddNewPointView from '../view/add-new-point-view';
 
 const pageMainElement = document.querySelector('.page-main');
 const tripEventsElement = pageMainElement.querySelector('.trip-events');
@@ -23,7 +22,6 @@ export default class BoardPresenter {
 
     render(new ListSortView, tripEventsElement);
     render(this.listTripComponent, tripEventsElement);
-    //render(new AddNewPointView, this.listTripComponent.getElement());
     render(new EditPointView({
       point: this.boardPoints[0],
       destinations: this.destinations,

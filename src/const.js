@@ -1,5 +1,5 @@
 const POINTS_COUNT = 5;
-const WAYPOINTS = ['Taxi', 'Bus', 'Train', 'Ship', 'Drive', 'Flight', 'Check-in', 'Sightseeing', 'Restaurant'];
+const WAYPOINTS = ['taxi', 'bus', 'train', 'ship', 'drive', 'flight', 'check-in', 'sightseeing', 'restaurant'];
 const SORTING_ELEMENTS = ['day', 'event', 'time', 'price', 'offers'];
 const FILTERS = ['everything', 'future', 'present', 'past'];
 
