@@ -1,5 +1,5 @@
-import { WAYPOINTS } from '../const';
-import { getRandomArrayElement } from '../utils';
+import { WAYPOINTS } from '../const.js';
+import { getRandomArrayElement } from '../utils.js';
 
 const mockPoints = [
   {

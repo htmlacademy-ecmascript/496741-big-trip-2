@@ -1,5 +1,5 @@
-import { createElement } from '../render';
-import { SORTING_ELEMENTS } from '../const';
+import { createElement } from '../render.js';
+import { SORTING_ELEMENTS } from '../const.js';
 
 function createItemsSortTemplate() {
   return SORTING_ELEMENTS.map((sortElement) => `<div class="trip-sort__item  trip-sort__item--${sortElement}">

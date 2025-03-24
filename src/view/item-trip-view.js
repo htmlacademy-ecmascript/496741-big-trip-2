@@ -1,6 +1,6 @@
-import { createElement } from '../render';
-import { findTimeInterval, humanizeDate } from '../utils';
-import { DateFormat } from '../const';
+import { createElement } from '../render.js';
+import { findTimeInterval, humanizeDate } from '../utils.js';
+import { DateFormat } from '../const.js';
 
 function createItemTripTemplate(point, destinations) {
   const {

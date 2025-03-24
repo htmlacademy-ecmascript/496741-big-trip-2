@@ -1,8 +1,8 @@
-import { render } from '../render';
-import ListSortView from '../view/list-sort-view';
-import ListTripView from '../view/list-trip-view';
-import ItemTripView from '../view/item-trip-view';
-import EditPointView from '../view/edit-point-view';
+import { render } from '../framework/render.js';
+import ListSortView from '../view/list-sort-view.js';
+import ListTripView from '../view/list-trip-view.js';
+import ItemTripView from '../view/item-trip-view.js';
+import EditPointView from '../view/edit-point-view.js';
 
 const pageMainElement = document.querySelector('.page-main');
 const tripEventsElement = pageMainElement.querySelector('.trip-events');

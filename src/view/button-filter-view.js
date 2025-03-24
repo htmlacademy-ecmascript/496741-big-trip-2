@@ -1,4 +1,4 @@
-import { createElement } from '../render';
+import { createElement } from '../render.js';
 
 function createButtonFilterTemplate() {
   return '<button class="visually-hidden" type="submit">Accept filter</button>';

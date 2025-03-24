@@ -1,6 +1,6 @@
-import { DateFormat, WAYPOINTS } from '../const';
-import { createElement } from '../render';
-import { humanizeDate } from '../utils';
+import { DateFormat, WAYPOINTS } from '../const.js';
+import { createElement } from '../render.js';
+import { humanizeDate } from '../utils.js';
 
 function createOffersTemplate(availableOffers, selectedOffers) {
   return availableOffers.map((offer) => {

@@ -1,5 +1,5 @@
-import { createElement } from '../render';
-import { FILTERS } from '../const';
+import { createElement } from '../render.js';
+import { FILTERS } from '../const.js';
 
 function createItemsFilterTemplate() {
   return FILTERS.map((filter) => `<div class="trip-filters__filter">

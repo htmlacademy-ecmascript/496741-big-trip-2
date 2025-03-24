@@ -1,4 +1,4 @@
-import { createElement } from '../render';
+import { createElement } from '../render.js';
 
 function createAddNewPointTemplate() {
   return `<li class="trip-events__item">

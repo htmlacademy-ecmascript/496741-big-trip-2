@@ -1,4 +1,4 @@
-import { createElement } from '../render';
+import { createElement } from '../render.js';
 
 function createFailedLoadTemplate() {
   return '<p class="trip-events__msg">Failed to load latest route information</p>';
