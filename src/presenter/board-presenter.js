@@ -34,12 +34,17 @@ export default class BoardPresenter {
       destinations: this.#boardDestinations,
       offers: this.#boardOffers
     }), this.#listTripComponent.element);
-    for (let i = 0; i < this.#boardPoints.length; i++) {
-      render(new ItemTripView({
-        point: this.#boardPoints[i],
-        destinations: this.#boardDestinations,
-        offers: this.#boardOffers
-      }), this.#listTripComponent.element);
-    }
+
+    this.#boardPoints.forEach((point) => this.#renderPoint(point));
+  }
+
+  #renderPoint(point) {
+    const itemTripComponent = new ItemTripView({
+      point,
+      destinations: this.#boardDestinations,
+      offers: this.#boardOffers
+    });
+
+    render(itemTripComponent, this.#listTripComponent.element);
   }
 }
