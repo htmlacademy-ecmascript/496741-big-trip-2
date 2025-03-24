@@ -26,13 +26,13 @@ export default class BoardPresenter {
       point: this.boardPoints[0],
       destinations: this.destinations,
       offers: this.offers
-    }), this.listTripComponent.getElement());
+    }), this.listTripComponent.element);
     for (let i = 0; i < this.boardPoints.length; i++) {
       render(new ItemTripView({
         point: this.boardPoints[i],
         destinations: this.destinations,
         offers: this.offers
-      }), this.listTripComponent.getElement());
+      }), this.listTripComponent.element);
     }
   }
 }

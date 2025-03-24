@@ -11,7 +11,7 @@ const tripСontrolsFiltersElement = pageHeaderElement.querySelector('.trip-contr
 const listFilterComponent = new ListFilterView();
 
 render(listFilterComponent, tripСontrolsFiltersElement);
-render(new ButtonFilterView, listFilterComponent.getElement());
+render(new ButtonFilterView, listFilterComponent.element);
 
 const pointsModel = new PointsModel();
 const boardPresenter = new BoardPresenter({

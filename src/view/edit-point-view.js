@@ -1,5 +1,5 @@
 import { DateFormat, WAYPOINTS } from '../const.js';
-import { createElement } from '../render.js';
+import AbstractView from '../framework/view/abstract-view.js';
 import { humanizeDate } from '../utils.js';
 
 function createOffersTemplate(availableOffers, selectedOffers) {
@@ -133,26 +133,19 @@ function createEditPointTemplate(point, destinations, offers) {
           </li>`;
 }
 
-export default class EditPointView {
+export default class EditPointView extends AbstractView {
+  #point;
+  #destinations;
+  #offers;
+
   constructor({point, destinations, offers}) {
-    this.point = point;
-    this.destinations = destinations;
-    this.offers = offers;
+    super();
+    this.#point = point;
+    this.#destinations = destinations;
+    this.#offers = offers;
   }
 
-  getTemplate() {
-    return createEditPointTemplate(this.point, this.destinations, this.offers);
-  }
-
-  getElement() {
-    if (!this.element) {
-      this.element = createElement(this.getTemplate());
-    }
-
-    return this.element;
-  }
-
-  removeElement() {
-    this.element = null;
+  get template() {
+    return createEditPointTemplate(this.#point, this.#destinations, this.#offers);
   }
 }

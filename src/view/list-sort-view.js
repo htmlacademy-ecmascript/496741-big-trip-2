@@ -1,5 +1,5 @@
-import { createElement } from '../render.js';
 import { SORTING_ELEMENTS } from '../const.js';
+import AbstractView from '../framework/view/abstract-view.js';
 
 function createItemsSortTemplate() {
   return SORTING_ELEMENTS.map((sortElement) => `<div class="trip-sort__item  trip-sort__item--${sortElement}">
@@ -13,20 +13,8 @@ function createListSortTemplate() {
   return `<form class="trip-events__trip-sort  trip-sort" action="#" method="get">${itemsSortTemplate}</form>`;
 }
 
-export default class ListSortView {
-  getTemplate() {
+export default class ListSortView extends AbstractView {
+  get template() {
     return createListSortTemplate();
-  }
-
-  getElement() {
-    if (!this.element) {
-      this.element = createElement(this.getTemplate());
-    }
-
-    return this.element;
-  }
-
-  removeElement() {
-    this.element = null;
   }
 }
