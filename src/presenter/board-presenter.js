@@ -8,31 +8,38 @@ const pageMainElement = document.querySelector('.page-main');
 const tripEventsElement = pageMainElement.querySelector('.trip-events');
 
 export default class BoardPresenter {
-  listTripComponent = new ListTripView();
+  #boardContainer = null;
+  #pointsModel = null;
+
+  #listTripComponent = new ListTripView();
+
+  #boardPoints = [];
+  #boardDestinations = [];
+  #boardOffers = [];
 
   constructor({boardContainer, pointsModel}) {
-    this.boardContainer = boardContainer;
-    this.pointsModel = pointsModel;
+    this.#boardContainer = boardContainer;
+    this.#pointsModel = pointsModel;
   }
 
   init() {
-    this.boardPoints = [...this.pointsModel.getPoints()];
-    this.destinations = [...this.pointsModel.getDestinations()];
-    this.offers = [...this.pointsModel.getOffers()];
+    this.#boardPoints = [...this.#pointsModel.points];
+    this.#boardDestinations = [...this.#pointsModel.destinations];
+    this.#boardOffers = [...this.#pointsModel.offers];
 
     render(new ListSortView, tripEventsElement);
-    render(this.listTripComponent, tripEventsElement);
+    render(this.#listTripComponent, tripEventsElement);
     render(new EditPointView({
-      point: this.boardPoints[0],
-      destinations: this.destinations,
-      offers: this.offers
-    }), this.listTripComponent.element);
-    for (let i = 0; i < this.boardPoints.length; i++) {
+      point: this.#boardPoints[0],
+      destinations: this.#boardDestinations,
+      offers: this.#boardOffers
+    }), this.#listTripComponent.element);
+    for (let i = 0; i < this.#boardPoints.length; i++) {
       render(new ItemTripView({
-        point: this.boardPoints[i],
-        destinations: this.destinations,
-        offers: this.offers
-      }), this.listTripComponent.element);
+        point: this.#boardPoints[i],
+        destinations: this.#boardDestinations,
+        offers: this.#boardOffers
+      }), this.#listTripComponent.element);
     }
   }
 }
