@@ -9,10 +9,16 @@ const ErrorText = {
   NO_SERVER: 'Failed to load latest route information',
 };
 
+const KeyCode = {
+  ESCAPE: 'Escape',
+  ENTER: 'Enter',
+  TAB: 'Tab'
+};
+
 const DateFormat = {
   DATE_AND_TIME: 'DD/MM/YY HH:mm',
   DATE: 'MMM DD',
   TIME: 'HH:mm'
 };
 
-export { POINTS_COUNT, WAYPOINTS, FILTERS, SORTING_ELEMENTS, ErrorText, DateFormat };
+export { POINTS_COUNT, WAYPOINTS, FILTERS, SORTING_ELEMENTS, ErrorText, DateFormat, KeyCode };

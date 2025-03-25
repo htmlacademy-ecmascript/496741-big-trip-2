@@ -1,4 +1,4 @@
-import { findTimeInterval, humanizeDate } from '../utils.js';
+import { findTimeInterval, humanizeDate } from '../utils/trip.js';
 import { DateFormat } from '../const.js';
 import AbstractView from '../framework/view/abstract-view.js';
 

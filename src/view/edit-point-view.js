@@ -1,6 +1,6 @@
 import { DateFormat, WAYPOINTS } from '../const.js';
 import AbstractView from '../framework/view/abstract-view.js';
-import { humanizeDate } from '../utils.js';
+import { humanizeDate } from '../utils/trip.js';
 
 function createOffersTemplate(availableOffers, selectedOffers) {
   return availableOffers.map((offer) => {
@@ -62,8 +62,6 @@ function createEditPointTemplate(point, destinations, offers) {
   const offersTemplate = createOffersTemplate(offer.offers, selectedOffers);
   const eventTypeItemsTemplate = createEventTypeItemsTemplate(type);
   const destinationOptionsTemplate = createDestinationOptionsTemplate(destinations);
-
-  //const diffTime = findTimeInterval(dateFrom, dateTo);
 
   return `<li class="trip-events__item">
     <form class="event event--edit" action="#" method="post">
@@ -138,6 +136,8 @@ export default class EditPointView extends AbstractView {
   #destinations;
   #offers;
   #handleEventRollupButtonClick = null;
+  // #handleFormSubmit = null;
+  // #formElement = null;
   #eventRollupButtonElement = null;
 
   constructor({point, destinations, offers, onEventRollupButtonClick}) {
@@ -146,9 +146,12 @@ export default class EditPointView extends AbstractView {
     this.#destinations = destinations;
     this.#offers = offers;
     this.#handleEventRollupButtonClick = onEventRollupButtonClick;
+    // this.#handleFormSubmit = onFormSubmit;
     this.#eventRollupButtonElement = this.element.querySelector('.event__rollup-btn');
+    // this.#formElement = this.element.querySelector('form');
 
     this.#eventRollupButtonElement.addEventListener('click', this.#clickEventRollupButtonHandler);
+    // this.#formElement.addEventListener('click', this.#formSubmitHandler);
   }
 
   get template() {
@@ -159,4 +162,9 @@ export default class EditPointView extends AbstractView {
     evt.preventDefault();
     this.#handleEventRollupButtonClick();
   };
+
+  // #formSubmitHandler = (evt) => {
+  //   evt.preventDefault();
+  //   this.#handleFormSubmit();
+  // };
 }

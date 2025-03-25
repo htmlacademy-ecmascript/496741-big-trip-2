@@ -1,7 +1,5 @@
 import dayjs from 'dayjs';
 
-const getRandomArrayElement = (items) => items[Math.floor(Math.random() * items.length)];
-
 const humanizeDate = (date, dateFormat) => date ? dayjs(date).format(dateFormat) : '';
 
 const findTimeInterval = (dateFrom, dateTo) => {
@@ -14,4 +12,4 @@ const findTimeInterval = (dateFrom, dateTo) => {
   return diffHours ? `${diffHours}H ${diffMinutes}M` : `${diffMinutes}M`;
 };
 
-export { getRandomArrayElement, humanizeDate, findTimeInterval };
+export { humanizeDate, findTimeInterval };

@@ -1,11 +1,10 @@
 import { render, replace } from '../framework/render.js';
 import ListSortView from '../view/list-sort-view.js';
 import ListTripView from '../view/list-trip-view.js';
+import ListEmptyView from '../view/list-empty-view.js';
 import ItemTripView from '../view/item-trip-view.js';
 import EditPointView from '../view/edit-point-view.js';
-
-const pageMainElement = document.querySelector('.page-main');
-const tripEventsElement = pageMainElement.querySelector('.trip-events');
+import { KeyCode } from '../const.js';
 
 export default class BoardPresenter {
   #boardContainer = null;
@@ -27,19 +26,25 @@ export default class BoardPresenter {
     this.#boardDestinations = [...this.#pointsModel.destinations];
     this.#boardOffers = [...this.#pointsModel.offers];
 
-    render(new ListSortView, tripEventsElement);
-    render(this.#listTripComponent, tripEventsElement);
-
-    this.#boardPoints.forEach((point) => this.#renderPoint(point));
+    this.#renderBoard();
   }
 
   #renderPoint(point) {
+    const escKeyDownHandler = (evt) => {
+      if (evt.key === KeyCode.ESCAPE) {
+        evt.preventDefault();
+        replaceFormToCard();
+        document.removeEventListener('keydown', escKeyDownHandler);
+      }
+    };
+
     const itemTripComponent = new ItemTripView({
       point,
       destinations: this.#boardDestinations,
       offers: this.#boardOffers,
       onEventRollupButtonClick: () => {
         replaceCardToForm();
+        document.addEventListener('keydown', escKeyDownHandler);
       }
     });
 
@@ -49,7 +54,12 @@ export default class BoardPresenter {
       offers: this.#boardOffers,
       onEventRollupButtonClick: () => {
         replaceFormToCard();
-      }
+        document.removeEventListener('keydown', escKeyDownHandler);
+      },
+      // onFormSubmit: () => {
+      //   replaceFormToCard();
+      //   document.removeEventListener('keydown', escKeyDownHandler);
+      // }
     });
 
     function replaceCardToForm() {
@@ -61,5 +71,16 @@ export default class BoardPresenter {
     }
 
     render(itemTripComponent, this.#listTripComponent.element);
+  }
+
+  #renderBoard() {
+    if (this.#boardPoints.length === 0) {
+      render(new ListEmptyView, this.#boardContainer);
+      return;
+    }
+    render(new ListSortView, this.#boardContainer);
+    render(this.#listTripComponent, this.#boardContainer);
+
+    this.#boardPoints.forEach((point) => this.#renderPoint(point));
   }
 }
