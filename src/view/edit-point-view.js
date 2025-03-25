@@ -135,15 +135,26 @@ export default class EditPointView extends AbstractView {
   #point;
   #destinations;
   #offers;
+  #handleEventRollupButtonClick = null;
+  #eventRollupButtonElement = null;
 
-  constructor({point, destinations, offers}) {
+  constructor({point, destinations, offers, onEventRollupButtonClick}) {
     super();
     this.#point = point;
     this.#destinations = destinations;
     this.#offers = offers;
+    this.#handleEventRollupButtonClick = onEventRollupButtonClick;
+    this.#eventRollupButtonElement = this.element.querySelector('.event__rollup-btn');
+
+    this.#eventRollupButtonElement.addEventListener('click', this.#clickEventRollupButtonHandler);
   }
 
   get template() {
     return createEditPointTemplate(this.#point, this.#destinations, this.#offers);
   }
+
+  #clickEventRollupButtonHandler = (evt) => {
+    evt.preventDefault();
+    this.#handleEventRollupButtonClick();
+  };
 }

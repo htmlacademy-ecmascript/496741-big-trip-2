@@ -1,4 +1,4 @@
-import { render } from '../framework/render.js';
+import { render, replace } from '../framework/render.js';
 import ListSortView from '../view/list-sort-view.js';
 import ListTripView from '../view/list-trip-view.js';
 import ItemTripView from '../view/item-trip-view.js';
@@ -34,14 +34,6 @@ export default class BoardPresenter {
     this.#boardPoints.forEach((point) => this.#renderPoint(point));
   }
 
-  #handleEventRollupButtonClick = (point, container) => {
-    render(new EditPointView({
-      point,
-      destinations: this.#boardDestinations,
-      offers: this.#boardOffers,
-    }), container);
-  };
-
   #renderPoint(point) {
 
     const listItemContainerComponent = new ListItemContainerView();
@@ -51,8 +43,28 @@ export default class BoardPresenter {
       point,
       destinations: this.#boardDestinations,
       offers: this.#boardOffers,
-      onClick: () => this.#handleEventRollupButtonClick(point, listItemContainerComponent.element)
+      onEventRollupButtonClick: () => {
+        replaceCardToForm();
+      }
     });
+
+    const editPointComponent = new EditPointView({
+      point,
+      destinations: this.#boardDestinations,
+      offers: this.#boardOffers,
+      onEventRollupButtonClick: () => {
+        replaceFormToCard();
+      }
+    });
+
+    function replaceCardToForm() {
+      replace(editPointComponent, itemTripComponent);
+    }
+
+    function replaceFormToCard() {
+      replace(itemTripComponent, editPointComponent);
+    }
+
     render(itemTripComponent, listItemContainerComponent.element);
   }
 }
