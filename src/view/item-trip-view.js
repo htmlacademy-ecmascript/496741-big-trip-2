@@ -1,18 +1,18 @@
-import { createElement } from '../render';
-import { findTimeInterval, humanizeDate } from '../utils';
-import { DateFormat } from '../const';
+import { findTimeInterval, humanizeDate } from '../utils/trip.js';
+import { DateFormat } from '../const.js';
+import AbstractView from '../framework/view/abstract-view.js';
 
-function createItemTripTemplate(point) {
+function createItemTripTemplate(point, destinations) {
   const {
     basePrice,
     dateFrom,
     dateTo,
-    destination: {
-      name,
-    },
+    destination,
     isFavorite,
-    type
+    type,
   } = point;
+
+  const {name} = destinations.find((itemDestination) => itemDestination.id === destination);
 
   const dateFromTime = humanizeDate(dateFrom, DateFormat.TIME);
   const dateFromDate = humanizeDate(dateFrom, DateFormat.DATE);
@@ -30,9 +30,9 @@ function createItemTripTemplate(point) {
       <h3 class="event__title">${type} ${name}</h3>
       <div class="event__schedule">
         <p class="event__time">
-          <time class="event__start-time" datetime="2019-03-18T10:30">${dateFromTime}</time>
+          <time class="event__start-time" datetime="${dateFrom}">${dateFromTime}</time>
           &mdash;
-          <time class="event__end-time" datetime="2019-03-18T11:00">${dateaToTime}</time>
+          <time class="event__end-time" datetime="${dateTo}">${dateaToTime}</time>
         </p>
         <p class="event__duration">${diffTime}</p>
       </div>
@@ -60,24 +60,30 @@ function createItemTripTemplate(point) {
   </li>`;
 }
 
-export default class ItemTripView {
-  constructor({point}) {
-    this.point = point;
+export default class ItemTripView extends AbstractView {
+  #point = null;
+  #destinations = null;
+  #offers = null;
+  #handleEventRollupButtonClick = null;
+  #eventRollupButtonElement = null;
+
+  constructor({point, destinations, offers, onEventRollupButtonClick}) {
+    super();
+    this.#point = point;
+    this.#destinations = destinations;
+    this.#offers = offers;
+    this.#handleEventRollupButtonClick = onEventRollupButtonClick;
+    this.#eventRollupButtonElement = this.element.querySelector('.event__rollup-btn');
+
+    this.#eventRollupButtonElement.addEventListener('click', this.#clickEventRollupButtonHandler);
   }
 
-  getTemplate() {
-    return createItemTripTemplate(this.point);
+  get template() {
+    return createItemTripTemplate(this.#point, this.#destinations, this.#offers);
   }
 
-  getElement() {
-    if (!this.element) {
-      this.element = createElement(this.getTemplate());
-    }
-
-    return this.element;
-  }
-
-  removeElement() {
-    this.element = null;
-  }
+  #clickEventRollupButtonHandler = (evt) => {
+    evt.preventDefault();
+    this.#handleEventRollupButtonClick();
+  };
 }

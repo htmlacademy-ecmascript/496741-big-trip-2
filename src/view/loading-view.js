@@ -1,4 +1,4 @@
-import { createElement } from '../render';
+import AbstractView from '../framework/view/abstract-view.js';
 
 function createLoadingTemplate() {
   return `
@@ -8,20 +8,8 @@ function createLoadingTemplate() {
   </section>`;
 }
 
-export default class LoadingView {
-  getTemplate() {
+export default class LoadingView extends AbstractView {
+  get template() {
     return createLoadingTemplate();
-  }
-
-  getElement() {
-    if (!this.element) {
-      this.element = createElement(this.getTemplate());
-    }
-
-    return this.element;
-  }
-
-  removeElement() {
-    this.element = null;
   }
 }
