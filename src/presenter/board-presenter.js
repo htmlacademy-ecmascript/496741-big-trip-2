@@ -2,6 +2,7 @@ import { render } from '../framework/render.js';
 import ListSortView from '../view/list-sort-view.js';
 import ListTripView from '../view/list-trip-view.js';
 import ItemTripView from '../view/item-trip-view.js';
+import ListItemContainerView from '../view/list-item-container-view.js';
 import EditPointView from '../view/edit-point-view.js';
 
 const pageMainElement = document.querySelector('.page-main');
@@ -29,22 +30,29 @@ export default class BoardPresenter {
 
     render(new ListSortView, tripEventsElement);
     render(this.#listTripComponent, tripEventsElement);
-    render(new EditPointView({
-      point: this.#boardPoints[0],
-      destinations: this.#boardDestinations,
-      offers: this.#boardOffers
-    }), this.#listTripComponent.element);
 
     this.#boardPoints.forEach((point) => this.#renderPoint(point));
   }
 
+  #handleEventRollupButtonClick = (point, container) => {
+    render(new EditPointView({
+      point,
+      destinations: this.#boardDestinations,
+      offers: this.#boardOffers,
+    }), container);
+  };
+
   #renderPoint(point) {
+
+    const listItemContainerComponent = new ListItemContainerView();
+    render(listItemContainerComponent, this.#listTripComponent.element);
+
     const itemTripComponent = new ItemTripView({
       point,
       destinations: this.#boardDestinations,
-      offers: this.#boardOffers
+      offers: this.#boardOffers,
+      onClick: () => this.#handleEventRollupButtonClick(point, listItemContainerComponent.element)
     });
-
-    render(itemTripComponent, this.#listTripComponent.element);
+    render(itemTripComponent, listItemContainerComponent.element);
   }
 }
