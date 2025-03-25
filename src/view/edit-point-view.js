@@ -136,22 +136,22 @@ export default class EditPointView extends AbstractView {
   #destinations;
   #offers;
   #handleEventRollupButtonClick = null;
-  // #handleFormSubmit = null;
-  // #formElement = null;
+  #handleFormSubmit = null;
+  #eventSaveButtonElement = null;
   #eventRollupButtonElement = null;
 
-  constructor({point, destinations, offers, onEventRollupButtonClick}) {
+  constructor({point, destinations, offers, onEventRollupButtonClick, onFormSubmit}) {
     super();
     this.#point = point;
     this.#destinations = destinations;
     this.#offers = offers;
     this.#handleEventRollupButtonClick = onEventRollupButtonClick;
-    // this.#handleFormSubmit = onFormSubmit;
+    this.#handleFormSubmit = onFormSubmit;
     this.#eventRollupButtonElement = this.element.querySelector('.event__rollup-btn');
-    // this.#formElement = this.element.querySelector('form');
+    this.#eventSaveButtonElement = this.element.querySelector('.event__save-btn');
 
     this.#eventRollupButtonElement.addEventListener('click', this.#clickEventRollupButtonHandler);
-    // this.#formElement.addEventListener('click', this.#formSubmitHandler);
+    this.#eventSaveButtonElement.addEventListener('click', this.#formSubmitHandler);
   }
 
   get template() {
@@ -163,8 +163,8 @@ export default class EditPointView extends AbstractView {
     this.#handleEventRollupButtonClick();
   };
 
-  // #formSubmitHandler = (evt) => {
-  //   evt.preventDefault();
-  //   this.#handleFormSubmit();
-  // };
+  #formSubmitHandler = (evt) => {
+    evt.preventDefault();
+    this.#handleFormSubmit();
+  };
 }

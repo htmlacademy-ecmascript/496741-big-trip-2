@@ -1,4 +1,5 @@
 import dayjs from 'dayjs';
+import { DateFormat } from '../const';
 
 const humanizeDate = (date, dateFormat) => date ? dayjs(date).format(dateFormat) : '';
 
@@ -12,4 +13,6 @@ const findTimeInterval = (dateFrom, dateTo) => {
   return diffHours ? `${diffHours}H ${diffMinutes}M` : `${diffMinutes}M`;
 };
 
-export { humanizeDate, findTimeInterval };
+const findCurrentDate = () => dayjs().format(DateFormat.DATE_AND_TIME);
+
+export { humanizeDate, findTimeInterval, findCurrentDate };

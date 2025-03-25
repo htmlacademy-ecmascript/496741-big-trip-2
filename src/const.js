@@ -1,7 +1,13 @@
 const POINTS_COUNT = 5;
 const WAYPOINTS = ['taxi', 'bus', 'train', 'ship', 'drive', 'flight', 'check-in', 'sightseeing', 'restaurant'];
 const SORTING_ELEMENTS = ['day', 'event', 'time', 'price', 'offers'];
-const FILTERS = ['everything', 'future', 'present', 'past'];
+
+const FilterType = {
+  EVERYTHING: 'everything',
+  FUTURE: 'future',
+  PRESENT: 'present',
+  PAST: 'past'
+};
 
 
 const ErrorText = {
@@ -21,4 +27,4 @@ const DateFormat = {
   TIME: 'HH:mm'
 };
 
-export { POINTS_COUNT, WAYPOINTS, FILTERS, SORTING_ELEMENTS, ErrorText, DateFormat, KeyCode };
+export { POINTS_COUNT, WAYPOINTS, FilterType, SORTING_ELEMENTS, ErrorText, DateFormat, KeyCode };
