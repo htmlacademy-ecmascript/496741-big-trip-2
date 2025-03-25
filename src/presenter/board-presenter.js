@@ -2,7 +2,6 @@ import { render, replace } from '../framework/render.js';
 import ListSortView from '../view/list-sort-view.js';
 import ListTripView from '../view/list-trip-view.js';
 import ItemTripView from '../view/item-trip-view.js';
-import ListItemContainerView from '../view/list-item-container-view.js';
 import EditPointView from '../view/edit-point-view.js';
 
 const pageMainElement = document.querySelector('.page-main');
@@ -35,10 +34,6 @@ export default class BoardPresenter {
   }
 
   #renderPoint(point) {
-
-    const listItemContainerComponent = new ListItemContainerView();
-    render(listItemContainerComponent, this.#listTripComponent.element);
-
     const itemTripComponent = new ItemTripView({
       point,
       destinations: this.#boardDestinations,
@@ -65,6 +60,6 @@ export default class BoardPresenter {
       replace(itemTripComponent, editPointComponent);
     }
 
-    render(itemTripComponent, listItemContainerComponent.element);
+    render(itemTripComponent, this.#listTripComponent.element);
   }
 }
