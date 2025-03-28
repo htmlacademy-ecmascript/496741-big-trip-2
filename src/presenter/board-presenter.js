@@ -5,26 +5,33 @@ import ListEmptyView from '../view/list-empty-view.js';
 import ItemTripView from '../view/item-trip-view.js';
 import EditPointView from '../view/edit-point-view.js';
 import { KeyCode } from '../const.js';
+import ListFilterView from '../view/list-filter-view.js';
+import ButtonFilterView from '../view/button-filter-view.js';
 
 export default class BoardPresenter {
   #boardContainer = null;
   #pointsModel = null;
-
+  #listFilterComponent = null;
   #listTripComponent = new ListTripView();
+  #tripСontrolsFiltersElement = document.querySelector('.trip-controls__filters');
 
   #boardPoints = [];
   #boardDestinations = [];
   #boardOffers = [];
 
-  constructor({boardContainer, pointsModel}) {
+  constructor({boardContainer, pointsModel, filters}) {
     this.#boardContainer = boardContainer;
     this.#pointsModel = pointsModel;
+    this.#listFilterComponent = new ListFilterView({filters});
   }
 
   init() {
     this.#boardPoints = [...this.#pointsModel.points];
     this.#boardDestinations = [...this.#pointsModel.destinations];
     this.#boardOffers = [...this.#pointsModel.offers];
+
+    render(this.#listFilterComponent, this.#tripСontrolsFiltersElement);
+    render(new ButtonFilterView, this.#listFilterComponent.element);
 
     this.#renderBoard();
   }

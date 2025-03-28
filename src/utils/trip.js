@@ -1,5 +1,4 @@
 import dayjs from 'dayjs';
-import { DateFormat } from '../const';
 
 const humanizeDate = (date, dateFormat) => date ? dayjs(date).format(dateFormat) : '';
 
@@ -13,6 +12,14 @@ const findTimeInterval = (dateFrom, dateTo) => {
   return diffHours ? `${diffHours}H ${diffMinutes}M` : `${diffMinutes}M`;
 };
 
-const findCurrentDate = () => dayjs().format(DateFormat.DATE_AND_TIME);
+//const findCurrentDate = () => dayjs();
 
-export { humanizeDate, findTimeInterval, findCurrentDate };
+function isFutureDate(targetDate) {
+  return dayjs().isBefore(dayjs(targetDate));
+}
+
+function isPastDate(targetDate) {
+  return dayjs().isAfter(dayjs(targetDate));
+}
+
+export { humanizeDate, findTimeInterval, isFutureDate, isPastDate };
