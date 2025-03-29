@@ -3,10 +3,22 @@ const WAYPOINTS = ['taxi', 'bus', 'train', 'ship', 'drive', 'flight', 'check-in'
 const SORTING_ELEMENTS = ['day', 'event', 'time', 'price', 'offers'];
 
 const FilterType = {
-  EVERYTHING: 'everything',
-  FUTURE: 'future',
-  PRESENT: 'present',
-  PAST: 'past'
+  EVERYTHING: {
+    name: 'everything',
+    emptyListMessage: 'Click New Event to create your first point'
+  },
+  FUTURE: {
+    name: 'future',
+    emptyListMessage: 'There are no future events now'
+  },
+  PRESENT: {
+    name: 'present',
+    emptyListMessage: 'There are no present events now'
+  },
+  PAST: {
+    name: 'past',
+    emptyListMessage: 'There are no past events now'
+  }
 };
 
 
