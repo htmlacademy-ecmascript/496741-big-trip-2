@@ -40,8 +40,7 @@ export default class BoardPresenter {
     const escKeyDownHandler = (evt) => {
       if (evt.key === KeyCode.ESCAPE) {
         evt.preventDefault();
-        replaceFormToCard();
-        document.removeEventListener('keydown', escKeyDownHandler);
+        replaceFormToCardHandler();
       }
     };
 
@@ -59,14 +58,8 @@ export default class BoardPresenter {
       point,
       destinations: this.#boardDestinations,
       offers: this.#boardOffers,
-      onEventRollupButtonClick: () => {
-        replaceFormToCard();
-        document.removeEventListener('keydown', escKeyDownHandler);
-      },
-      onFormSubmit: () => {
-        replaceFormToCard();
-        document.removeEventListener('keydown', escKeyDownHandler);
-      }
+      onEventRollupButtonClick: replaceFormToCardHandler,
+      onFormSubmit: replaceFormToCardHandler
     });
 
     function replaceCardToForm() {
@@ -75,6 +68,11 @@ export default class BoardPresenter {
 
     function replaceFormToCard() {
       replace(itemTripComponent, editPointComponent);
+    }
+
+    function replaceFormToCardHandler() {
+      replaceFormToCard();
+      document.removeEventListener('keydown', escKeyDownHandler);
     }
 
     render(itemTripComponent, this.#listTripComponent.element);
