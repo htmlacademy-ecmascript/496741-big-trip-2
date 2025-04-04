@@ -1,12 +1,10 @@
-import { render, replace } from '../framework/render.js';
+import { render } from '../framework/render.js';
 import ListSortView from '../view/list-sort-view.js';
 import ListTripView from '../view/list-trip-view.js';
 import ListEmptyView from '../view/list-empty-view.js';
-import ItemTripView from '../view/item-trip-view.js';
-import EditPointView from '../view/edit-point-view.js';
-import { KeyCode } from '../const.js';
 import ListFilterView from '../view/list-filter-view.js';
 import ButtonFilterView from '../view/button-filter-view.js';
+import PointPresenter from './point-presenter.js';
 
 export default class BoardPresenter {
   #boardContainer = null;
@@ -16,8 +14,8 @@ export default class BoardPresenter {
   #tripСontrolsFiltersElement = document.querySelector('.trip-controls__filters');
 
   #boardPoints = [];
-  #boardDestinations = [];
-  #boardOffers = [];
+  #destinations = [];
+  #offers = [];
 
   constructor({boardContainer, pointsModel, filters}) {
     this.#boardContainer = boardContainer;
@@ -27,55 +25,33 @@ export default class BoardPresenter {
 
   init() {
     this.#boardPoints = [...this.#pointsModel.points];
-    this.#boardDestinations = [...this.#pointsModel.destinations];
-    this.#boardOffers = [...this.#pointsModel.offers];
+    this.#destinations = [...this.#pointsModel.destinations];
+    this.#offers = [...this.#pointsModel.offers];
 
-    render(this.#listFilterComponent, this.#tripСontrolsFiltersElement);
-    render(new ButtonFilterView, this.#listFilterComponent.element);
-
+    this.#renderFilter();
     this.#renderBoard();
   }
 
+  #renderFilter() {
+    render(this.#listFilterComponent, this.#tripСontrolsFiltersElement);
+    render(new ButtonFilterView, this.#listFilterComponent.element);
+  }
+
+  #renderSort() {
+    render(new ListSortView, this.#boardContainer);
+  }
+
   #renderPoint(point) {
-    const escKeyDownHandler = (evt) => {
-      if (evt.key === KeyCode.ESCAPE) {
-        evt.preventDefault();
-        replaceFormToCardHandler();
-      }
-    };
-
-    const itemTripComponent = new ItemTripView({
-      point,
-      destinations: this.#boardDestinations,
-      offers: this.#boardOffers,
-      onEventRollupButtonClick: () => {
-        replaceCardToForm();
-        document.addEventListener('keydown', escKeyDownHandler);
-      }
+    const pointPresenter = new PointPresenter({
+      pointListContainer: this.#listTripComponent.element,
     });
 
-    const editPointComponent = new EditPointView({
-      point,
-      destinations: this.#boardDestinations,
-      offers: this.#boardOffers,
-      onEventRollupButtonClick: replaceFormToCardHandler,
-      onFormSubmit: replaceFormToCardHandler
-    });
+    pointPresenter.init(point, this.#destinations, this.#offers);
+  }
 
-    function replaceCardToForm() {
-      replace(editPointComponent, itemTripComponent);
-    }
-
-    function replaceFormToCard() {
-      replace(itemTripComponent, editPointComponent);
-    }
-
-    function replaceFormToCardHandler() {
-      replaceFormToCard();
-      document.removeEventListener('keydown', escKeyDownHandler);
-    }
-
-    render(itemTripComponent, this.#listTripComponent.element);
+  #renderTripList() {
+    render(this.#listTripComponent, this.#boardContainer);
+    this.#boardPoints.forEach((point) => this.#renderPoint(point));
   }
 
   #renderBoard() {
@@ -83,9 +59,8 @@ export default class BoardPresenter {
       render(new ListEmptyView, this.#boardContainer);
       return;
     }
-    render(new ListSortView, this.#boardContainer);
-    render(this.#listTripComponent, this.#boardContainer);
 
-    this.#boardPoints.forEach((point) => this.#renderPoint(point));
+    this.#renderSort();
+    this.#renderTripList();
   }
 }
