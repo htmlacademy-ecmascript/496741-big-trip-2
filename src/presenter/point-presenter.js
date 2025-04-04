@@ -1,12 +1,12 @@
 import { KeyCode } from '../const';
-import { render, replace } from '../framework/render.js';
+import { remove, render, replace } from '../framework/render.js';
 import EditPointView from '../view/edit-point-view.js';
-import ItemTripView from '../view/item-trip-view.js';
+import PointView from '../view/point-view.js';
 
 export default class PointPresenter {
   #pointListContainer = null;
 
-  #itemTripComponent = null;
+  #pointComponent = null;
   #editPointComponent = null;
 
   #point = null;
@@ -23,7 +23,10 @@ export default class PointPresenter {
     this.#destinations = destinations;
     this.#offers = offers;
 
-    this.#itemTripComponent = new ItemTripView({
+    const prevPointComponent = this.#pointComponent;
+    const prevEditPointComponent = this.#editPointComponent;
+
+    this.#pointComponent = new PointView({
       point: this.#point,
       destinations: this.#destinations,
       offers: this.#offers,
@@ -41,20 +44,34 @@ export default class PointPresenter {
       onFormSubmit: this.#replaceFormToCardHandler
     });
 
-    render(this.#itemTripComponent, this.#pointListContainer);
+    if (prevPointComponent === null || prevEditPointComponent === null) {
+      render(this.#pointComponent, this.#pointListContainer);
+      return;
+    }
+
+    if (this.#pointListContainer.contains(prevPointComponent.element)) {
+      replace(this.#pointComponent, prevPointComponent);
+    }
+
+    if(this.#pointListContainer.contains(prevEditPointComponent.element)) {
+      replace(this.#editPointComponent, prevEditPointComponent);
+    }
+
+    remove(prevPointComponent);
+    remove(prevEditPointComponent);
+  }
+
+  destroy() {
+    remove(this.#pointComponent);
+    remove(this.#editPointComponent);
   }
 
   #replaceCardToForm() {
-    replace(this.#editPointComponent, this.#itemTripComponent);
+    replace(this.#editPointComponent, this.#pointComponent);
   }
 
   #replaceFormToCard() {
-    replace(this.#itemTripComponent, this.#editPointComponent);
-  }
-
-  #replaceFormToCardHandler() {
-    this.#replaceFormToCard();
-    document.removeEventListener('keydown', this.#escKeyDownHandler);
+    replace(this.#pointComponent, this.#editPointComponent);
   }
 
   #escKeyDownHandler = (evt) => {
@@ -63,4 +80,9 @@ export default class PointPresenter {
       this.#replaceFormToCardHandler();
     }
   };
+
+  #replaceFormToCardHandler() {
+    this.#replaceFormToCard();
+    document.removeEventListener('keydown', this.#escKeyDownHandler);
+  }
 }

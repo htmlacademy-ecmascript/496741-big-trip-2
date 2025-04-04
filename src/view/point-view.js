@@ -2,7 +2,7 @@ import { findTimeInterval, humanizeDate } from '../utils/trip.js';
 import { DateFormat } from '../const.js';
 import AbstractView from '../framework/view/abstract-view.js';
 
-function createItemTripTemplate(point, destinations) {
+function createPointTemplate(point, destinations) {
   const {
     basePrice,
     dateFrom,
@@ -60,7 +60,7 @@ function createItemTripTemplate(point, destinations) {
   </li>`;
 }
 
-export default class ItemTripView extends AbstractView {
+export default class PointView extends AbstractView {
   #point = null;
   #destinations = null;
   #offers = null;
@@ -79,7 +79,7 @@ export default class ItemTripView extends AbstractView {
   }
 
   get template() {
-    return createItemTripTemplate(this.#point, this.#destinations, this.#offers);
+    return createPointTemplate(this.#point, this.#destinations, this.#offers);
   }
 
   #clickEventRollupButtonHandler = (evt) => {
