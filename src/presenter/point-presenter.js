@@ -81,8 +81,8 @@ export default class PointPresenter {
     }
   };
 
-  #replaceFormToCardHandler() {
+  #replaceFormToCardHandler = () => {
     this.#replaceFormToCard();
     document.removeEventListener('keydown', this.#escKeyDownHandler);
-  }
+  };
 }
