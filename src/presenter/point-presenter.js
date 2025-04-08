@@ -5,6 +5,7 @@ import PointView from '../view/point-view.js';
 
 export default class PointPresenter {
   #pointListContainer = null;
+  #handleDataChange = null;
 
   #pointComponent = null;
   #editPointComponent = null;
@@ -14,8 +15,9 @@ export default class PointPresenter {
   #offers = null;
 
 
-  constructor({pointListContainer}) {
+  constructor({pointListContainer, onDataChange}) {
     this.#pointListContainer = pointListContainer;
+    this.#handleDataChange = onDataChange;
   }
 
   init(point, destinations, offers) {
@@ -30,7 +32,8 @@ export default class PointPresenter {
       point: this.#point,
       destinations: this.#destinations,
       offers: this.#offers,
-      onEventRollupButtonClick: () => {
+      onFavoriteClick: this.#handleFavoriteClick,
+      onRollupButtonClick: () => {
         this.#replaceCardToForm();
         document.addEventListener('keydown', this.#escKeyDownHandler);
       }
@@ -40,8 +43,8 @@ export default class PointPresenter {
       point: this.#point,
       destinations: this.#destinations,
       offers: this.#offers,
-      onEventRollupButtonClick: this.#replaceFormToCardHandler,
-      onFormSubmit: this.#replaceFormToCardHandler
+      onRollupButtonClick: this.#replaceFormToCardHandler,
+      onFormSubmit: this.#handleFormSubmit
     });
 
     if (prevPointComponent === null || prevEditPointComponent === null) {
@@ -74,6 +77,11 @@ export default class PointPresenter {
     replace(this.#pointComponent, this.#editPointComponent);
   }
 
+  #replaceFormToCardHandler = () => {
+    this.#replaceFormToCard();
+    document.removeEventListener('keydown', this.#escKeyDownHandler);
+  };
+
   #escKeyDownHandler = (evt) => {
     if (evt.key === KeyCode.ESCAPE) {
       evt.preventDefault();
@@ -81,8 +89,12 @@ export default class PointPresenter {
     }
   };
 
-  #replaceFormToCardHandler = () => {
-    this.#replaceFormToCard();
-    document.removeEventListener('keydown', this.#escKeyDownHandler);
+  #handleFavoriteClick = () => {
+    this.#handleDataChange({...this.#point, isFavorite: !this.#point.isFavorite});
+  };
+
+  #handleFormSubmit = (point) => {
+    this.#handleDataChange(point);
+    this.#replaceFormToCardHandler();
   };
 }

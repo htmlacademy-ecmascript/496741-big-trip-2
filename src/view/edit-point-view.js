@@ -135,36 +135,36 @@ export default class EditPointView extends AbstractView {
   #point;
   #destinations;
   #offers;
-  #handleEventRollupButtonClick = null;
+  #handleRollupButtonClick = null;
   #handleFormSubmit = null;
-  #eventSaveButtonElement = null;
-  #eventRollupButtonElement = null;
+  #saveButtonElement = null;
+  #rollupButtonElement = null;
 
-  constructor({point, destinations, offers, onEventRollupButtonClick, onFormSubmit}) {
+  constructor({point, destinations, offers, onRollupButtonClick, onFormSubmit}) {
     super();
     this.#point = point;
     this.#destinations = destinations;
     this.#offers = offers;
-    this.#handleEventRollupButtonClick = onEventRollupButtonClick;
+    this.#handleRollupButtonClick = onRollupButtonClick;
     this.#handleFormSubmit = onFormSubmit;
-    this.#eventRollupButtonElement = this.element.querySelector('.event__rollup-btn');
-    this.#eventSaveButtonElement = this.element.querySelector('.event__save-btn');
+    this.#rollupButtonElement = this.element.querySelector('.event__rollup-btn');
+    this.#saveButtonElement = this.element.querySelector('.event__save-btn');
 
-    this.#eventRollupButtonElement.addEventListener('click', this.#clickEventRollupButtonHandler);
-    this.#eventSaveButtonElement.addEventListener('click', this.#formSubmitHandler);
+    this.#rollupButtonElement.addEventListener('click', this.#clickRollupButtonHandler);
+    this.#saveButtonElement.addEventListener('click', this.#formSubmitHandler);
   }
 
   get template() {
     return createEditPointTemplate(this.#point, this.#destinations, this.#offers);
   }
 
-  #clickEventRollupButtonHandler = (evt) => {
+  #clickRollupButtonHandler = (evt) => {
     evt.preventDefault();
-    this.#handleEventRollupButtonClick();
+    this.#handleRollupButtonClick();
   };
 
   #formSubmitHandler = (evt) => {
     evt.preventDefault();
-    this.#handleFormSubmit();
+    this.#handleFormSubmit(this.#point);
   };
 }
