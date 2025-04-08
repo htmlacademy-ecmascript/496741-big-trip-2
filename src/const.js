@@ -21,6 +21,10 @@ const FilterType = {
   }
 };
 
+const Mode = {
+  DEFAULT: 'DEFAULT',
+  EDITING: 'EDITING',
+};
 
 const ErrorText = {
   NO_WAYPOINTS: 'Click New Event to create your first point',
@@ -39,4 +43,4 @@ const DateFormat = {
   TIME: 'HH:mm'
 };
 
-export { POINTS_COUNT, WAYPOINTS, FilterType, SORTING_ELEMENTS, ErrorText, DateFormat, KeyCode };
+export { POINTS_COUNT, WAYPOINTS, FilterType, SORTING_ELEMENTS, ErrorText, DateFormat, KeyCode, Mode };

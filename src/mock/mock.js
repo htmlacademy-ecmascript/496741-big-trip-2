@@ -1,5 +1,4 @@
 import { WAYPOINTS } from '../const.js';
-import { getRandomArrayElement } from '../utils/common.js';
 
 const mockPoints = [
   {
@@ -190,6 +189,4 @@ const mockOffers = [
   }
 ];
 
-const getRandomPoint = () => getRandomArrayElement(mockPoints);
-
-export { getRandomPoint, mockDestinations, mockOffers };
+export { mockDestinations, mockOffers, mockPoints };
