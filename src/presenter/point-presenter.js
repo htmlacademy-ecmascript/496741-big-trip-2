@@ -1,4 +1,4 @@
-import { KeyCode } from '../const';
+import { KeyCode, Mode } from '../const';
 import { remove, render, replace } from '../framework/render.js';
 import EditPointView from '../view/edit-point-view.js';
 import PointView from '../view/point-view.js';
@@ -6,6 +6,7 @@ import PointView from '../view/point-view.js';
 export default class PointPresenter {
   #pointListContainer = null;
   #handleDataChange = null;
+  #handleModeChange = null;
 
   #pointComponent = null;
   #editPointComponent = null;
@@ -13,11 +14,13 @@ export default class PointPresenter {
   #point = null;
   #destinations = null;
   #offers = null;
+  #mode = Mode.DEFAULT;
 
 
-  constructor({pointListContainer, onDataChange}) {
+  constructor({pointListContainer, onDataChange, onModeChange}) {
     this.#pointListContainer = pointListContainer;
     this.#handleDataChange = onDataChange;
+    this.#handleModeChange = onModeChange;
   }
 
   init(point, destinations, offers) {
@@ -33,17 +36,14 @@ export default class PointPresenter {
       destinations: this.#destinations,
       offers: this.#offers,
       onFavoriteClick: this.#handleFavoriteClick,
-      onRollupButtonClick: () => {
-        this.#replaceCardToForm();
-        document.addEventListener('keydown', this.#escKeyDownHandler);
-      }
+      onRollupButtonClick: this.#replaceCardToForm
     });
 
     this.#editPointComponent = new EditPointView({
       point: this.#point,
       destinations: this.#destinations,
       offers: this.#offers,
-      onRollupButtonClick: this.#replaceFormToCardHandler,
+      onRollupButtonClick: this.#replaceFormToCard,
       onFormSubmit: this.#handleFormSubmit
     });
 
@@ -52,11 +52,11 @@ export default class PointPresenter {
       return;
     }
 
-    if (this.#pointListContainer.contains(prevPointComponent.element)) {
+    if (this.#mode === Mode.DEFAULT) {
       replace(this.#pointComponent, prevPointComponent);
     }
 
-    if(this.#pointListContainer.contains(prevEditPointComponent.element)) {
+    if(this.#mode === Mode.EDITING) {
       replace(this.#editPointComponent, prevEditPointComponent);
     }
 
@@ -69,23 +69,29 @@ export default class PointPresenter {
     remove(this.#editPointComponent);
   }
 
-  #replaceCardToForm() {
+  resetView() {
+    if (this.#mode !== Mode.DEFAULT) {
+      this.#replaceFormToCard();
+    }
+  }
+
+  #replaceCardToForm = () => {
     replace(this.#editPointComponent, this.#pointComponent);
-  }
+    document.addEventListener('keydown', this.#escKeyDownHandler);
+    this.#handleModeChange();
+    this.#mode = Mode.EDITING;
+  };
 
-  #replaceFormToCard() {
+  #replaceFormToCard = () => {
     replace(this.#pointComponent, this.#editPointComponent);
-  }
-
-  #replaceFormToCardHandler = () => {
-    this.#replaceFormToCard();
     document.removeEventListener('keydown', this.#escKeyDownHandler);
+    this.#mode = Mode.DEFAULT;
   };
 
   #escKeyDownHandler = (evt) => {
     if (evt.key === KeyCode.ESCAPE) {
       evt.preventDefault();
-      this.#replaceFormToCardHandler();
+      this.#replaceFormToCard();
     }
   };
 
@@ -95,6 +101,6 @@ export default class PointPresenter {
 
   #handleFormSubmit = (point) => {
     this.#handleDataChange(point);
-    this.#replaceFormToCardHandler();
+    this.#replaceFormToCard();
   };
 }
