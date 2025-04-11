@@ -10,6 +10,7 @@ import { updateItem } from '../utils/common.js';
 export default class BoardPresenter {
   #boardContainer = null;
   #pointsModel = null;
+  #sortListComponent = null;
   #listFilterComponent = null;
   #listTripComponent = new ListTripView();
   #tripСontrolsFiltersElement = document.querySelector('.trip-controls__filters');
@@ -48,8 +49,18 @@ export default class BoardPresenter {
     render(new ButtonFilterView, this.#listFilterComponent.element);
   }
 
+  #handleSortTypeChange = (sortType) => {
+    // - Сортируем задачи
+    // - Очищаем список
+    // - Рендерим список заново
+    console.log(sortType);
+  };
+
   #renderSort() {
-    render(new ListSortView, this.#boardContainer);
+    this.#sortListComponent = new ListSortView({
+      onSortTypeChange: this.#handleSortTypeChange
+    });
+    render(this.#sortListComponent, this.#boardContainer);
   }
 
   #renderPoint(point) {

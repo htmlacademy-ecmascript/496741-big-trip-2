@@ -2,6 +2,14 @@ const POINTS_COUNT = 5;
 const WAYPOINTS = ['taxi', 'bus', 'train', 'ship', 'drive', 'flight', 'check-in', 'sightseeing', 'restaurant'];
 const SORTING_ELEMENTS = ['day', 'event', 'time', 'price', 'offers'];
 
+// const SortType = {
+//   DAY: 'day',
+//   EVENT: 'event',
+//   TIME: 'time',
+//   PRICE: 'price',
+//   OFFERS: 'offers'
+// };
+
 const FilterType = {
   EVERYTHING: {
     name: 'everything',
