@@ -7,7 +7,7 @@ import ButtonFilterView from '../view/button-filter-view.js';
 import PointPresenter from './point-presenter.js';
 import { updateItem } from '../utils/common.js';
 import { SortType } from '../const.js';
-import { sortDateDown, sortDescendingCost, sortDurationDown } from '../utils/trip.js';
+import { sortDateUp, sortDescendingCost, sortDurationDown } from '../utils/trip.js';
 
 export default class BoardPresenter {
   #boardContainer = null;
@@ -58,7 +58,7 @@ export default class BoardPresenter {
   #sortPoints(sortType) {
     switch(sortType) {
       case SortType.DAY:
-        this.#boardPoints.sort(sortDateDown);
+        this.#boardPoints.sort(sortDateUp);
         break;
       case SortType.PRICE:
         this.#boardPoints.sort(sortDescendingCost);
@@ -73,10 +73,6 @@ export default class BoardPresenter {
   }
 
   #handleSortTypeChange = (sortType) => {
-    // - Сортируем задачи
-    // - Очищаем список
-    // - Рендерим список заново
-
     if (this.#currentSortType === sortType) {
       return;
     }
@@ -121,6 +117,7 @@ export default class BoardPresenter {
       return;
     }
 
+    this.#sortPoints(this.#currentSortType);
     this.#renderSort();
     this.#renderTripList();
   }

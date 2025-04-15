@@ -22,7 +22,7 @@ function isPastDate(targetDate) {
 
 const sortDescendingCost = (a, b) => b.basePrice - a.basePrice;
 
-const sortDateDown = (a, b) => dayjs(b.dateFrom).valueOf() - dayjs(a.dateFrom).valueOf();
+const sortDateUp = (a, b) => dayjs(a.dateFrom).valueOf() - dayjs(b.dateFrom).valueOf();
 
 const sortDurationDown = (a, b) => {
   const durationA = dayjs(a.dateTo).diff(dayjs(a.dateFrom), 'day');
@@ -36,6 +36,6 @@ export {
   isFutureDate,
   isPastDate,
   sortDescendingCost,
-  sortDateDown,
+  sortDateUp,
   sortDurationDown
 };

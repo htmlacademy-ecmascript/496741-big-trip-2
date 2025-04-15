@@ -38,14 +38,11 @@ export default class ListSortView extends AbstractView {
   }
 
   #sortTypeChangeHandler = (evt) => {
-    if (evt.target.tagName !== 'LABEL') {
-      return;
-    }
-    if (evt.target.dataset.sortType === SortType.EVENT
-      || evt.target.dataset.sortType === SortType.OFFERS) {
+    if (evt.target.closest('trip-sort__btn') || evt.target.previousElementSibling.disabled) {
       return;
     }
     evt.preventDefault();
     this.#handleSortTypeChange(evt.target.dataset.sortType);
+    evt.target.previousElementSibling.checked = true;
   };
 }
