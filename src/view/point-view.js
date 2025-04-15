@@ -14,8 +14,9 @@ function createPointTemplate(point, destinations) {
 
   const {name} = destinations.find((itemDestination) => itemDestination.id === destination);
 
-  const dateFromTime = humanizeDate(dateFrom, DateFormat.TIME);
   const dateFromDate = humanizeDate(dateFrom, DateFormat.DATE);
+  const dateFromTime = humanizeDate(dateFrom, DateFormat.TIME);
+  const dateFromMonthAndDay = humanizeDate(dateFrom, DateFormat.MONTH_AND_DAY);
   const dateaToTime = humanizeDate(dateTo, DateFormat.TIME);
 
   const diffTime = findTimeInterval(dateFrom, dateTo);
@@ -23,7 +24,7 @@ function createPointTemplate(point, destinations) {
 
   return `<li class="trip-events__item">
     <div class="event">
-      <time class="event__date" datetime="2019-03-18">${dateFromDate}</time>
+      <time class="event__date" datetime="${dateFromDate}">${dateFromMonthAndDay}</time>
       <div class="event__type">
         <img class="event__type-icon" width="42" height="42" src="img/icons/${type}.png" alt="Event type icon">
       </div>

@@ -12,8 +12,6 @@ const findTimeInterval = (dateFrom, dateTo) => {
   return diffHours ? `${diffHours}H ${diffMinutes}M` : `${diffMinutes}M`;
 };
 
-//const findCurrentDate = () => dayjs();
-
 function isFutureDate(targetDate) {
   return dayjs().isBefore(dayjs(targetDate));
 }
@@ -22,4 +20,22 @@ function isPastDate(targetDate) {
   return dayjs().isAfter(dayjs(targetDate));
 }
 
-export { humanizeDate, findTimeInterval, isFutureDate, isPastDate };
+const sortDescendingCost = (a, b) => b.basePrice - a.basePrice;
+
+const sortDateDown = (a, b) => dayjs(b.dateFrom).valueOf() - dayjs(a.dateFrom).valueOf();
+
+const sortDurationDown = (a, b) => {
+  const durationA = dayjs(a.dateTo).diff(dayjs(a.dateFrom), 'day');
+  const durationB = dayjs(b.dateTo).diff(dayjs(b.dateFrom), 'day');
+  return durationB - durationA;
+};
+
+export {
+  humanizeDate,
+  findTimeInterval,
+  isFutureDate,
+  isPastDate,
+  sortDescendingCost,
+  sortDateDown,
+  sortDurationDown
+};

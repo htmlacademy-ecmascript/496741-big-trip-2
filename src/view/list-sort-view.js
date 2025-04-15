@@ -1,19 +1,20 @@
-import { SORTING_ELEMENTS } from '../const.js';
+import { SortType } from '../const.js';
 import AbstractView from '../framework/view/abstract-view.js';
 
 function createItemsSortTemplate() {
-  return SORTING_ELEMENTS.map((sortElement) => `<div class="trip-sort__item  trip-sort__item--${sortElement}">
+  return Object.keys(SortType).map((sortElement) => `<div class="trip-sort__item  trip-sort__item--${SortType[sortElement]}">
     <input
-      id="sort-${sortElement}"
+      id="sort-${SortType[sortElement]}"
       class="trip-sort__input  visually-hidden"
       type="radio" name="trip-sort"
-      value="sort-${sortElement}"
+      value="sort-${SortType[sortElement]}"
+      ${SortType[sortElement] === SortType.EVENT || SortType[sortElement] === SortType.OFFERS ? 'disabled' : ''}
     >
     <label
       class="trip-sort__btn"
-      for="sort-${sortElement}"
-      data-sort-type="${sortElement}"
-    >${sortElement}</label>
+      for="sort-${SortType[sortElement]}"
+      data-sort-type="${SortType[sortElement]}"
+    >${SortType[sortElement]}</label>
   </div>`).join('');
 }
 
@@ -40,7 +41,10 @@ export default class ListSortView extends AbstractView {
     if (evt.target.tagName !== 'LABEL') {
       return;
     }
-
+    if (evt.target.dataset.sortType === SortType.EVENT
+      || evt.target.dataset.sortType === SortType.OFFERS) {
+      return;
+    }
     evt.preventDefault();
     this.#handleSortTypeChange(evt.target.dataset.sortType);
   };
