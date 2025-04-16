@@ -6,10 +6,13 @@ import ListFilterView from '../view/list-filter-view.js';
 import ButtonFilterView from '../view/button-filter-view.js';
 import PointPresenter from './point-presenter.js';
 import { updateItem } from '../utils/common.js';
+import { SortType } from '../const.js';
+import { sortDateUp, sortDescendingCost, sortDurationDown } from '../utils/trip.js';
 
 export default class BoardPresenter {
   #boardContainer = null;
   #pointsModel = null;
+  #sortListComponent = null;
   #listFilterComponent = null;
   #listTripComponent = new ListTripView();
   #tripСontrolsFiltersElement = document.querySelector('.trip-controls__filters');
@@ -18,6 +21,8 @@ export default class BoardPresenter {
   #destinations = [];
   #offers = [];
   #pointPresenters = new Map();
+  #currentSortType = SortType.DAY;
+  #sourcedBoardPoints = [];
 
   constructor({boardContainer, pointsModel, filters}) {
     this.#boardContainer = boardContainer;
@@ -29,6 +34,7 @@ export default class BoardPresenter {
     this.#boardPoints = [...this.#pointsModel.points];
     this.#destinations = [...this.#pointsModel.destinations];
     this.#offers = [...this.#pointsModel.offers];
+    this.#sourcedBoardPoints = [...this.#pointsModel.points];
 
     this.#renderFilter();
     this.#renderBoard();
@@ -40,6 +46,7 @@ export default class BoardPresenter {
 
   #handlePointChange = (updatedPoint) => {
     this.#boardPoints = updateItem(this.#boardPoints, updatedPoint);
+    this.#sourcedBoardPoints = updateItem(this.#sourcedBoardPoints, updatedPoint);
     this.#pointPresenters.get(updatedPoint.id).init(updatedPoint, this.#destinations, this.#offers);
   };
 
@@ -48,8 +55,37 @@ export default class BoardPresenter {
     render(new ButtonFilterView, this.#listFilterComponent.element);
   }
 
+  #sortPoints(sortType) {
+    switch(sortType) {
+      case SortType.DAY:
+        this.#boardPoints.sort(sortDateUp);
+        break;
+      case SortType.PRICE:
+        this.#boardPoints.sort(sortDescendingCost);
+        break;
+      case SortType.TIME:
+        this.#boardPoints.sort(sortDurationDown);
+        break;
+      default:
+        this.#boardPoints = [...this.#sourcedBoardPoints];
+    }
+    this.#currentSortType = sortType;
+  }
+
+  #handleSortTypeChange = (sortType) => {
+    if (this.#currentSortType === sortType) {
+      return;
+    }
+    this.#sortPoints(sortType);
+    this.#clearTripList();
+    this.#renderTripList();
+  };
+
   #renderSort() {
-    render(new ListSortView, this.#boardContainer);
+    this.#sortListComponent = new ListSortView({
+      onSortTypeChange: this.#handleSortTypeChange
+    });
+    render(this.#sortListComponent, this.#boardContainer);
   }
 
   #renderPoint(point) {
@@ -70,7 +106,9 @@ export default class BoardPresenter {
 
   #renderTripList() {
     render(this.#listTripComponent, this.#boardContainer);
-    this.#boardPoints.forEach((point) => this.#renderPoint(point));
+    this.#boardPoints.forEach((point) => {
+      this.#renderPoint(point);
+    });
   }
 
   #renderBoard() {
@@ -79,6 +117,7 @@ export default class BoardPresenter {
       return;
     }
 
+    this.#sortPoints(this.#currentSortType);
     this.#renderSort();
     this.#renderTripList();
   }

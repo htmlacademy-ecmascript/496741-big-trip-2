@@ -1,6 +1,13 @@
 const POINTS_COUNT = 5;
 const WAYPOINTS = ['taxi', 'bus', 'train', 'ship', 'drive', 'flight', 'check-in', 'sightseeing', 'restaurant'];
-const SORTING_ELEMENTS = ['day', 'event', 'time', 'price', 'offers'];
+
+const SortType = {
+  DAY: 'day',
+  EVENT: 'event',
+  TIME: 'time',
+  PRICE: 'price',
+  OFFERS: 'offers'
+};
 
 const FilterType = {
   EVERYTHING: {
@@ -39,8 +46,9 @@ const KeyCode = {
 
 const DateFormat = {
   DATE_AND_TIME: 'DD/MM/YY HH:mm',
-  DATE: 'MMM DD',
+  DATE: 'YYYY-MM-DD',
+  MONTH_AND_DAY: 'MMM DD',
   TIME: 'HH:mm'
 };
 
-export { POINTS_COUNT, WAYPOINTS, FilterType, SORTING_ELEMENTS, ErrorText, DateFormat, KeyCode, Mode };
+export { POINTS_COUNT, WAYPOINTS, FilterType, ErrorText, DateFormat, KeyCode, Mode, SortType };
