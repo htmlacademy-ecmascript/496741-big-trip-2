@@ -9,6 +9,7 @@ function createItemsSortTemplate() {
       type="radio" name="trip-sort"
       value="sort-${SortType[sortElement]}"
       ${SortType[sortElement] === SortType.EVENT || SortType[sortElement] === SortType.OFFERS ? 'disabled' : ''}
+      ${SortType[sortElement] === SortType.DAY ? 'checked' : ''}
     >
     <label
       class="trip-sort__btn"
@@ -38,7 +39,7 @@ export default class ListSortView extends AbstractView {
   }
 
   #sortTypeChangeHandler = (evt) => {
-    if (evt.target.closest('trip-sort__btn') || evt.target.previousElementSibling.disabled) {
+    if (!evt.target.closest('.trip-sort__btn') || evt.target.previousElementSibling.disabled) {
       return;
     }
     evt.preventDefault();
