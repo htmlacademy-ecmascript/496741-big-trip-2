@@ -1,5 +1,5 @@
 import { DateFormat, WAYPOINTS } from '../const.js';
-import AbstractView from '../framework/view/abstract-view.js';
+import AbstractStatefulView from '../framework/view/abstract-stateful-view.js';
 import { humanizeDate } from '../utils/trip.js';
 
 function createOffersTemplate(availableOffers, selectedOffers) {
@@ -85,7 +85,14 @@ function createEditPointTemplate(point, destinations, offers) {
           <label class="event__label  event__type-output" for="event-destination-${id}">
             ${type}
           </label>
-          <input class="event__input  event__input--destination" id="event-destination-${id}" type="text" name="event-destination" value="${name}" list="destination-list-${id}">
+          <input
+            class="event__input  event__input--destination"
+            id="event-destination-${id}"
+            type="text"
+            name="event-destination"
+            value="${name}"
+            list="destination-list-${id}"
+          >
           <datalist id="destination-list-${id}">
             ${destinationOptionsTemplate}
           </datalist>
@@ -131,32 +138,51 @@ function createEditPointTemplate(point, destinations, offers) {
   </li>`;
 }
 
-export default class EditPointView extends AbstractView {
-  #point;
+export default class EditPointView extends AbstractStatefulView {
   #destinations;
   #offers;
   #handleRollupButtonClick = null;
   #handleFormSubmit = null;
   #saveButtonElement = null;
   #rollupButtonElement = null;
+  #eventTypeInputElements = null;
 
   constructor({point, destinations, offers, onRollupButtonClick, onFormSubmit}) {
     super();
-    this.#point = point;
+    this._setState(EditPointView.parsePointToState(point));
     this.#destinations = destinations;
     this.#offers = offers;
     this.#handleRollupButtonClick = onRollupButtonClick;
     this.#handleFormSubmit = onFormSubmit;
     this.#rollupButtonElement = this.element.querySelector('.event__rollup-btn');
     this.#saveButtonElement = this.element.querySelector('.event__save-btn');
+    this.#eventTypeInputElements = this.element.querySelector('.event__type-group');
 
-    this.#rollupButtonElement.addEventListener('click', this.#clickRollupButtonHandler);
-    this.#saveButtonElement.addEventListener('click', this.#formSubmitHandler);
+    this._restoreHandlers();
   }
 
   get template() {
-    return createEditPointTemplate(this.#point, this.#destinations, this.#offers);
+    return createEditPointTemplate(this._state, this.#destinations, this.#offers);
   }
+
+  reset(point) {
+    this.updateElement(
+      EditPointView.parsePointToState(point),
+    );
+  }
+
+  _restoreHandlers() {
+    this.#rollupButtonElement.addEventListener('click', this.#clickRollupButtonHandler);
+    this.#saveButtonElement.addEventListener('click', this.#formSubmitHandler);
+    this.#eventTypeInputElements.addEventListener('change', this.#inputEventTypeHandler);
+  }
+
+  #inputEventTypeHandler = (evt) => {
+    evt.preventDefault();
+    this.updateElement({
+      type: evt.target.value,
+    });
+  };
 
   #clickRollupButtonHandler = (evt) => {
     evt.preventDefault();
@@ -165,6 +191,16 @@ export default class EditPointView extends AbstractView {
 
   #formSubmitHandler = (evt) => {
     evt.preventDefault();
-    this.#handleFormSubmit(this.#point);
+    this.#handleFormSubmit(EditPointView.parseStateToPoint(this._state));
   };
+
+  static parsePointToState(point) {
+    return {...point};
+  }
+
+  static parseStateToPoint(state) {
+    const point = {...state};
+
+    return point;
+  }
 }
