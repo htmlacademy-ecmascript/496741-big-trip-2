@@ -154,9 +154,6 @@ export default class EditPointView extends AbstractStatefulView {
     this.#offers = offers;
     this.#handleRollupButtonClick = onRollupButtonClick;
     this.#handleFormSubmit = onFormSubmit;
-    this.#rollupButtonElement = this.element.querySelector('.event__rollup-btn');
-    this.#saveButtonElement = this.element.querySelector('.event__save-btn');
-    this.#eventTypeInputElements = this.element.querySelector('.event__type-group');
 
     this._restoreHandlers();
   }
@@ -172,6 +169,10 @@ export default class EditPointView extends AbstractStatefulView {
   }
 
   _restoreHandlers() {
+    this.#rollupButtonElement = this.element.querySelector('.event__rollup-btn');
+    this.#saveButtonElement = this.element.querySelector('.event__save-btn');
+    this.#eventTypeInputElements = this.element.querySelector('.event__type-group');
+
     this.#rollupButtonElement.addEventListener('click', this.#clickRollupButtonHandler);
     this.#saveButtonElement.addEventListener('click', this.#formSubmitHandler);
     this.#eventTypeInputElements.addEventListener('change', this.#inputEventTypeHandler);
