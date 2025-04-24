@@ -107,86 +107,31 @@ const mockDestinations = [
   }
 ];
 
-const mockOffers = [
-  {
-    type: WAYPOINTS[0],
-    offers: [
-      {
-        id: 'b4c3e4e6-9053-42ce-b747-e281314baa31',
-        title: 'Upgrade to a business class',
-        price: 120
-      },
-      {
-        id: 'b4c3e4e6-9053-42ce-b747-e281314baa32',
-        title: 'Upgrade to a comfort+',
-        price: 100
-      },
-      {
-        id: 'b4c3e4e6-9053-42ce-b747-e281314baa33',
-        title: 'help with luggage',
-        price: 150
-      }
-    ]
-  },
-  {
-    type: WAYPOINTS[1],
-    offers: []
-  },
-  {
-    type: WAYPOINTS[2],
-    offers: [
-      {
-        id: 'b4c3e4e6-9053-42ce-b747-e281314baa34',
-        title: 'personal trainer',
-        price: 100
-      },
-      {
-        id: 'b4c3e4e6-9053-42ce-b747-e281314baa35',
-        title: 'shower set',
-        price: 50
-      },
-      {
-        id: 'b4c3e4e6-9053-42ce-b747-e281314baa36',
-        title: 'sports nutrition',
-        price: 80
-      },
-      {
-        id: 'b4c3e4e6-9053-42ce-b747-e281314baa37',
-        title: 'sauna',
-        price: 40
-      }
-    ]
-  },
-  {
-    type: WAYPOINTS[5],
-    offers: [
-      {
-        id: 'b4c3e4e6-9053-42ce-b747-e281314baa38',
-        title: 'chair selection',
-        price: 20
-      },
-      {
-        id: 'b4c3e4e6-9053-42ce-b747-e281314baa39',
-        title: 'dinner',
-        price: 40
-      },
-      {
-        id: 'b4c3e4e6-9053-42ce-b747-e281314baa40',
-        title: 'extra luggage',
-        price: 100
-      },
-      {
-        id: 'b4c3e4e6-9053-42ce-b747-e281314baa41',
-        title: 'Upgrade to a business class',
-        price: 1000
-      },
-      {
-        id: 'b4c3e4e6-9053-42ce-b747-e281314baa42',
-        title: 'pet transportation',
-        price: 50
-      }
-    ]
-  }
-];
+function createIdGenerator() {
+  let currentId = 0;
+
+  return function() {
+    return currentId++;
+  };
+}
+
+function getRandomInt(min = 10, max = 2500) {
+  return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
+const getOfferId = createIdGenerator();
+
+const getOfferItem = () => ({
+  id: getOfferId().toString(),
+  title: 'Upgrade to a business class',
+  price: getRandomInt()
+});
+
+const getOffer = (point) => ({
+  type: point,
+  offers: Array.from({length: getRandomInt(0, 6)}, getOfferItem)
+});
+
+const mockOffers = WAYPOINTS.map((point) => getOffer(point));
 
 export { mockDestinations, mockOffers, mockPoints };
