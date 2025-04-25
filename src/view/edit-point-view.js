@@ -145,7 +145,8 @@ export default class EditPointView extends AbstractStatefulView {
   #handleFormSubmit = null;
   #saveButtonElement = null;
   #rollupButtonElement = null;
-  #eventTypeInputElements = null;
+  #typeInputElements = null;
+  #destinationInputElement = null;
 
   constructor({point, destinations, offers, onRollupButtonClick, onFormSubmit}) {
     super();
@@ -171,17 +172,32 @@ export default class EditPointView extends AbstractStatefulView {
   _restoreHandlers() {
     this.#rollupButtonElement = this.element.querySelector('.event__rollup-btn');
     this.#saveButtonElement = this.element.querySelector('.event__save-btn');
-    this.#eventTypeInputElements = this.element.querySelector('.event__type-group');
+    this.#typeInputElements = this.element.querySelector('.event__type-group');
+    this.#destinationInputElement = this.element.querySelector('.event__input--destination');
 
     this.#rollupButtonElement.addEventListener('click', this.#clickRollupButtonHandler);
     this.#saveButtonElement.addEventListener('click', this.#formSubmitHandler);
-    this.#eventTypeInputElements.addEventListener('change', this.#inputEventTypeHandler);
+    this.#typeInputElements.addEventListener('change', this.#typeInputHandler);
+    this.#destinationInputElement.addEventListener('input', this.#destinationInputHandler);
   }
 
-  #inputEventTypeHandler = (evt) => {
+  #typeInputHandler = (evt) => {
     evt.preventDefault();
     this.updateElement({
       type: evt.target.value,
+    });
+  };
+
+  #destinationInputHandler = (evt) => {
+    evt.preventDefault();
+    if (!this.#destinations.some((destination) => destination.name === evt.target.value)) {
+      return;
+    }
+    const newDestination = this.#destinations.find(
+      (destination) => destination.name === evt.target.value
+    );
+    this._setState({
+      destination: newDestination.id,
     });
   };
 
