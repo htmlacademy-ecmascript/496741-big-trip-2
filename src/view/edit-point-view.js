@@ -1,6 +1,8 @@
 import { DateFormat, WAYPOINTS } from '../const.js';
 import AbstractStatefulView from '../framework/view/abstract-stateful-view.js';
 import { humanizeDate } from '../utils/trip.js';
+import flatpickr from 'flatpickr';
+import 'flatpickr/dist/flatpickr.min.css';
 
 function createOffersTemplate(availableOffers, selectedOffers) {
   return availableOffers.map((offer) => {
@@ -99,8 +101,8 @@ function createEditPointTemplate(point, destinations, offers) {
         </div>
 
         <div class="event__field-group  event__field-group--time">
-          <label class="visually-hidden" for="event-start-time-${id}">From</label>
-          <input class="event__input  event__input--time" id="event-start-time-${id}" type="text" name="event-start-time" value=${dateFromDataAndTime}>
+          <label class="visually-hidden" for="event-start-time-1">From</label>
+          <input class="event__input  event__input--time" id="event-start-time-1" type="text" name="event-start-time" value=${dateFromDataAndTime}>
           &mdash;
           <label class="visually-hidden" for="event-end-time-1">To</label>
           <input class="event__input  event__input--time" id="event-end-time-1" type="text" name="event-end-time" value=${dateaToDateAndTime}>
@@ -147,6 +149,7 @@ export default class EditPointView extends AbstractStatefulView {
   #rollupButtonElement = null;
   #typeInputElements = null;
   #destinationInputElement = null;
+  #datepickr = null;
 
   constructor({point, destinations, offers, onRollupButtonClick, onFormSubmit}) {
     super();
@@ -161,6 +164,15 @@ export default class EditPointView extends AbstractStatefulView {
 
   get template() {
     return createEditPointTemplate(this._state, this.#destinations, this.#offers);
+  }
+
+  removeElement() {
+    super.removeElement();
+
+    if(this.#datepickr) {
+      this.#datepickr.destroy();
+      this.#datepickr = null;
+    }
   }
 
   reset(point) {
@@ -179,6 +191,9 @@ export default class EditPointView extends AbstractStatefulView {
     this.#saveButtonElement.addEventListener('click', this.#formSubmitHandler);
     this.#typeInputElements.addEventListener('change', this.#typeInputHandler);
     this.#destinationInputElement.addEventListener('input', this.#destinationInputHandler);
+
+    this.#setDateFromDatepickr();
+    this.#setDateToDatepickr();
   }
 
   #typeInputHandler = (evt) => {
@@ -201,6 +216,18 @@ export default class EditPointView extends AbstractStatefulView {
     });
   };
 
+  #dateFromChangeHandler = ([date]) => {
+    this.updateElement({
+      dateFrom: date,
+    });
+  };
+
+  #dateToChangeHandler = ([date]) => {
+    this.updateElement({
+      dateTo: date,
+    });
+  };
+
   #clickRollupButtonHandler = (evt) => {
     evt.preventDefault();
     this.#handleRollupButtonClick();
@@ -210,6 +237,28 @@ export default class EditPointView extends AbstractStatefulView {
     evt.preventDefault();
     this.#handleFormSubmit(EditPointView.parseStateToPoint(this._state));
   };
+
+  #setDateFromDatepickr() {
+    this.#datepickr = flatpickr(
+      this.element.querySelector('#event-start-time-1'),
+      {
+        dateFormat: 'j F',
+        defaultDate: this._state.dateFrom,
+        onChange: this.#dateFromChangeHandler,
+      }
+    );
+  }
+
+  #setDateToDatepickr() {
+    this.#datepickr = flatpickr(
+      this.element.querySelector('#event-end-time-1'),
+      {
+        dateFormat: 'j F',
+        defaultDate: this._state.dateTo,
+        onChange: this.#dateToChangeHandler,
+      }
+    );
+  }
 
   static parsePointToState(point) {
     return {...point};
