@@ -14,6 +14,7 @@ function createOffersTemplate(availableOffers, selectedOffers) {
       id="event-offer-${id}"
       type="checkbox"
       name="event-offer"
+      data-offer-id=${id}
       ${selectedOffers.includes(id) ? 'checked' : ''}>
     <label class="event__offer-label" for="event-offer-${id}">
       <span class="event__offer-title">${title}</span>
@@ -148,6 +149,7 @@ export default class EditPointView extends AbstractStatefulView {
   #saveButtonElement = null;
   #rollupButtonElement = null;
   #typeInputElements = null;
+  #offerInputElements = null;
   #destinationInputElement = null;
   #datepickr = null;
 
@@ -185,11 +187,13 @@ export default class EditPointView extends AbstractStatefulView {
     this.#rollupButtonElement = this.element.querySelector('.event__rollup-btn');
     this.#saveButtonElement = this.element.querySelector('.event__save-btn');
     this.#typeInputElements = this.element.querySelector('.event__type-group');
+    this.#offerInputElements = this.element.querySelector('.event__available-offers');
     this.#destinationInputElement = this.element.querySelector('.event__input--destination');
 
     this.#rollupButtonElement.addEventListener('click', this.#clickRollupButtonHandler);
     this.#saveButtonElement.addEventListener('click', this.#formSubmitHandler);
     this.#typeInputElements.addEventListener('change', this.#typeInputHandler);
+    this.#offerInputElements.addEventListener('change', this.#offersChangeHandler);
     this.#destinationInputElement.addEventListener('input', this.#destinationInputHandler);
 
     this.#setDateFromDatepickr();
@@ -200,7 +204,34 @@ export default class EditPointView extends AbstractStatefulView {
     evt.preventDefault();
     this.updateElement({
       type: evt.target.value,
+      offers: []
     });
+  };
+
+  #offersChangeHandler = (evt) => {
+    if (!this._state.offers.includes(evt.target.dataset.offerId)) {
+      this._setState({
+        offers: [...this._state.offers, evt.target.dataset.offerId]
+      });
+    } else {
+      const filteredOffers = [...this._state.offers.filter((offer) => offer !== evt.target.dataset.offerId)];
+      this._setState({
+        offers: filteredOffers
+      });
+    }
+
+    // if (this._state.offers.includes(evt.target.dataset.offerId)) {
+    //   this._setState({
+    //     offers: this._state.offers.filter((item) => item !== evt.target.dataset.offerId)
+    //   });
+    // } else {
+    //   this._setState({
+    //     offers: this._state.offers.push(evt.target.dataset.offerId)
+    //   });
+    // }
+    console.log(this._state.offers);
+    console.log(evt.target.checked);
+    console.log(evt.target);
   };
 
   #destinationInputHandler = (evt) => {
