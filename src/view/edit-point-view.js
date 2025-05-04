@@ -219,19 +219,6 @@ export default class EditPointView extends AbstractStatefulView {
         offers: filteredOffers
       });
     }
-
-    // if (this._state.offers.includes(evt.target.dataset.offerId)) {
-    //   this._setState({
-    //     offers: this._state.offers.filter((item) => item !== evt.target.dataset.offerId)
-    //   });
-    // } else {
-    //   this._setState({
-    //     offers: this._state.offers.push(evt.target.dataset.offerId)
-    //   });
-    // }
-    console.log(this._state.offers);
-    console.log(evt.target.checked);
-    console.log(evt.target);
   };
 
   #destinationInputHandler = (evt) => {
