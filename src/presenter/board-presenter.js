@@ -30,6 +30,18 @@ export default class BoardPresenter {
     this.#listFilterComponent = new ListFilterView({filters});
   }
 
+  get points() {
+    return this.#pointsModel.points;
+  }
+
+  // get destinations() {
+  //   return this.#pointsModel.destinations;
+  // }
+
+  // get offers() {
+  //   return this.#pointsModel.offers;
+  // }
+
   init() {
     this.#boardPoints = [...this.#pointsModel.points];
     this.#destinations = [...this.#pointsModel.destinations];

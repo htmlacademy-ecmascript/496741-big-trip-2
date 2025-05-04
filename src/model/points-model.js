@@ -1,7 +1,8 @@
+import Observable from '../framework/observable';
 import { mockDestinations, mockOffers } from '../mock/mock';
 import { mockPoints } from '../mock/mock';
 
-export default class PointsModel {
+export default class PointsModel extends Observable {
   #points = mockPoints.sort(() => Math.random() - 0.5);
   #destinations = mockDestinations;
   #offers = mockOffers;
