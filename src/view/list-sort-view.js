@@ -1,7 +1,7 @@
 import { SortType } from '../const.js';
 import AbstractView from '../framework/view/abstract-view.js';
 
-function createItemsSortTemplate() {
+function createItemsSortTemplate(currentSortType) {
   return Object.keys(SortType).map((sortElement) => `<div class="trip-sort__item  trip-sort__item--${SortType[sortElement]}">
     <input
       id="sort-${SortType[sortElement]}"
@@ -9,7 +9,7 @@ function createItemsSortTemplate() {
       type="radio" name="trip-sort"
       value="sort-${SortType[sortElement]}"
       ${SortType[sortElement] === SortType.EVENT || SortType[sortElement] === SortType.OFFERS ? 'disabled' : ''}
-      ${SortType[sortElement] === SortType.DAY ? 'checked' : ''}
+      ${SortType[sortElement] === currentSortType ? 'checked' : ''}
     >
     <label
       class="trip-sort__btn"
@@ -19,23 +19,27 @@ function createItemsSortTemplate() {
   </div>`).join('');
 }
 
-function createListSortTemplate() {
-  const itemsSortTemplate = createItemsSortTemplate();
-  return `<form class="trip-events__trip-sort  trip-sort" action="#" method="get">${itemsSortTemplate}</form>`;
+function createListSortTemplate(currentSortType) {
+  const itemsSortTemplate = createItemsSortTemplate(currentSortType);
+  return `<form class="trip-events__trip-sort  trip-sort" action="#" method="get">
+            ${itemsSortTemplate}
+          </form>`;
 }
 
 export default class ListSortView extends AbstractView {
+  #currentSortType = null;
   #handleSortTypeChange = null;
 
-  constructor({onSortTypeChange}) {
+  constructor({currentSortType, onSortTypeChange}) {
     super();
+    this.#currentSortType = currentSortType;
     this.#handleSortTypeChange = onSortTypeChange;
 
     this.element.addEventListener('click', this.#sortTypeChangeHandler);
   }
 
   get template() {
-    return createListSortTemplate();
+    return createListSortTemplate(this.#currentSortType);
   }
 
   #sortTypeChangeHandler = (evt) => {

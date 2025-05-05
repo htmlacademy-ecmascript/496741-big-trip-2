@@ -1,4 +1,4 @@
-import { render } from '../framework/render.js';
+import { remove, render } from '../framework/render.js';
 import ListSortView from '../view/list-sort-view.js';
 import ListTripView from '../view/list-trip-view.js';
 import ListEmptyView from '../view/list-empty-view.js';
@@ -12,6 +12,7 @@ export default class BoardPresenter {
   #boardContainer = null;
   #pointsModel = null;
   #sortListComponent = null;
+  #listEmptyComponent = new ListEmptyView();
   #listFilterComponent = null;
   #listTripComponent = new ListTripView();
   #tripСontrolsFiltersElement = document.querySelector('.trip-controls__filters');
@@ -70,17 +71,17 @@ export default class BoardPresenter {
   };
 
   #handleModelEvent = (updateType, data) => {
-    console.log(updateType, data);
-    // В зависимости от типа изменений решаем, что делать:
     switch (updateType) {
       case UpdateType.PATCH:
         this.#pointPresenters.get(data.id).init(data);
         break;
       case UpdateType.MINOR:
-        //обновить список
+        this.#clearBoard();
+        this.#renderBoard();
         break;
       case UpdateType.MAJOR:
-        //обновить всю доску
+        this.#clearBoard({resetSortType: true});
+        this.#renderBoard();
         break;
     }
   };
@@ -94,13 +95,14 @@ export default class BoardPresenter {
     if (this.#currentSortType === sortType) {
       return;
     }
-    this.#currentSortType(sortType);
-    this.#clearTripList();
-    this.#renderTripList();
+    this.#currentSortType = sortType;
+    this.#clearBoard();
+    this.#renderBoard();
   };
 
   #renderSort() {
     this.#sortListComponent = new ListSortView({
+      currentSortType: this.#currentSortType,
       onSortTypeChange: this.#handleSortTypeChange
     });
     render(this.#sortListComponent, this.#boardContainer);
@@ -117,25 +119,41 @@ export default class BoardPresenter {
     this.#pointPresenters.set(point.id, pointPresenter);
   }
 
-  #clearTripList() {
+  // #clearTripList() {
+  //   this.#pointPresenters.forEach((presenter) => presenter.destroy());
+  //   this.#pointPresenters.clear();
+  // }
+
+  // #renderTripList() {
+  //   render(this.#listTripComponent, this.#boardContainer);
+  //   this.points.forEach((point) => {
+  //     this.#renderPoint(point);
+  //   });
+  // }
+
+  #clearBoard({resetSortType = false} = {}) {
     this.#pointPresenters.forEach((presenter) => presenter.destroy());
     this.#pointPresenters.clear();
-  }
 
-  #renderTripList() {
-    render(this.#listTripComponent, this.#boardContainer);
-    this.points.forEach((point) => {
-      this.#renderPoint(point);
-    });
+    remove(this.#sortListComponent);
+    remove(this.#listEmptyComponent);
+
+    if (resetSortType) {
+      this.#currentSortType = SortType.DAY;
+    }
   }
 
   #renderBoard() {
     if (this.points.length === 0) {
-      render(new ListEmptyView, this.#boardContainer);
+      render(this.#listEmptyComponent, this.#boardContainer);
       return;
     }
 
     this.#renderSort();
-    this.#renderTripList();
+
+    render(this.#listTripComponent, this.#boardContainer);
+    this.points.forEach((point) => {
+      this.#renderPoint(point);
+    });
   }
 }
