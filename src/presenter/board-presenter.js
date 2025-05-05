@@ -5,7 +5,6 @@ import ListEmptyView from '../view/list-empty-view.js';
 import ListFilterView from '../view/list-filter-view.js';
 import ButtonFilterView from '../view/button-filter-view.js';
 import PointPresenter from './point-presenter.js';
-import { updateItem } from '../utils/common.js';
 import { SortType } from '../const.js';
 import { sortDateUp, sortDescendingCost, sortDurationDown } from '../utils/trip.js';
 
@@ -17,12 +16,8 @@ export default class BoardPresenter {
   #listTripComponent = new ListTripView();
   #tripСontrolsFiltersElement = document.querySelector('.trip-controls__filters');
 
-  #boardPoints = [];
-  #destinations = [];
-  #offers = [];
   #pointPresenters = new Map();
   #currentSortType = SortType.DAY;
-  #sourcedBoardPoints = [];
 
   constructor({boardContainer, pointsModel, filters}) {
     this.#boardContainer = boardContainer;
@@ -31,23 +26,26 @@ export default class BoardPresenter {
   }
 
   get points() {
+    switch(this.#currentSortType) {
+      case SortType.DAY:
+        return [...this.#pointsModel.points].sort(sortDateUp);
+      case SortType.PRICE:
+        return [...this.#pointsModel.points].sort(sortDescendingCost);
+      case SortType.TIME:
+        return [...this.#pointsModel.points].sort(sortDurationDown);
+    }
     return this.#pointsModel.points;
   }
 
-  // get destinations() {
-  //   return this.#pointsModel.destinations;
-  // }
+  get destinations() {
+    return this.#pointsModel.destinations;
+  }
 
-  // get offers() {
-  //   return this.#pointsModel.offers;
-  // }
+  get offers() {
+    return this.#pointsModel.offers;
+  }
 
   init() {
-    this.#boardPoints = [...this.#pointsModel.points];
-    this.#destinations = [...this.#pointsModel.destinations];
-    this.#offers = [...this.#pointsModel.offers];
-    this.#sourcedBoardPoints = [...this.#pointsModel.points];
-
     this.#renderFilter();
     this.#renderBoard();
   }
@@ -57,9 +55,7 @@ export default class BoardPresenter {
   };
 
   #handlePointChange = (updatedPoint) => {
-    this.#boardPoints = updateItem(this.#boardPoints, updatedPoint);
-    this.#sourcedBoardPoints = updateItem(this.#sourcedBoardPoints, updatedPoint);
-    this.#pointPresenters.get(updatedPoint.id).init(updatedPoint, this.#destinations, this.#offers);
+    this.#pointPresenters.get(updatedPoint.id).init(updatedPoint, this.destinations, this.offers);
   };
 
   #renderFilter() {
@@ -67,28 +63,11 @@ export default class BoardPresenter {
     render(new ButtonFilterView, this.#listFilterComponent.element);
   }
 
-  #sortPoints(sortType) {
-    switch(sortType) {
-      case SortType.DAY:
-        this.#boardPoints.sort(sortDateUp);
-        break;
-      case SortType.PRICE:
-        this.#boardPoints.sort(sortDescendingCost);
-        break;
-      case SortType.TIME:
-        this.#boardPoints.sort(sortDurationDown);
-        break;
-      default:
-        this.#boardPoints = [...this.#sourcedBoardPoints];
-    }
-    this.#currentSortType = sortType;
-  }
-
   #handleSortTypeChange = (sortType) => {
     if (this.#currentSortType === sortType) {
       return;
     }
-    this.#sortPoints(sortType);
+    this.#currentSortType(sortType);
     this.#clearTripList();
     this.#renderTripList();
   };
@@ -107,7 +86,7 @@ export default class BoardPresenter {
       onModeChange: this.#handleModeChange
     });
 
-    pointPresenter.init(point, this.#destinations, this.#offers);
+    pointPresenter.init(point, this.destinations, this.offers);
     this.#pointPresenters.set(point.id, pointPresenter);
   }
 
@@ -118,18 +97,17 @@ export default class BoardPresenter {
 
   #renderTripList() {
     render(this.#listTripComponent, this.#boardContainer);
-    this.#boardPoints.forEach((point) => {
+    this.points.forEach((point) => {
       this.#renderPoint(point);
     });
   }
 
   #renderBoard() {
-    if (this.#boardPoints.length === 0) {
+    if (this.points.length === 0) {
       render(new ListEmptyView, this.#boardContainer);
       return;
     }
 
-    this.#sortPoints(this.#currentSortType);
     this.#renderSort();
     this.#renderTripList();
   }
