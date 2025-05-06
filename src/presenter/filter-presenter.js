@@ -1,7 +1,6 @@
 import { FilterType, UpdateType } from '../const';
 import { remove, render, replace } from '../framework/render';
 import { filter } from '../utils/filter';
-import ButtonFilterView from '../view/button-filter-view';
 import ListFilterView from '../view/list-filter-view';
 
 export default class FilterPresenter {
@@ -41,7 +40,6 @@ export default class FilterPresenter {
 
     if (prevFilterComponent === null) {
       render(this.#filterComponent, this.#filrterContainer);
-      render(new ButtonFilterView, this.#filterComponent.element);
       return;
     }
 

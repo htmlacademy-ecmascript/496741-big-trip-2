@@ -35,8 +35,7 @@ const ErrorText = {
 
 const KeyCode = {
   ESCAPE: 'Escape',
-  ENTER: 'Enter',
-  TAB: 'Tab'
+  ESC: 'Esc',
 };
 
 const DateFormat = {

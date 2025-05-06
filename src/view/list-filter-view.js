@@ -13,10 +13,17 @@ function createItemsFilterTemplate(filters, currentFilterType) {
     </div>`).join('');
 }
 
+function createButtonFilterTemplate() {
+  return '<button class="visually-hidden" type="submit">Accept filter</button>';
+}
+
 function createListFilterTemplate(filters, currentFilterType) {
   const itemsFilterTemplate = createItemsFilterTemplate(filters, currentFilterType);
-
-  return `<form class="trip-filters" action="#" method="get">${itemsFilterTemplate}</form>`;
+  const buttonFilterTemplate = createButtonFilterTemplate();
+  return `<form class="trip-filters" action="#" method="get">
+    ${itemsFilterTemplate}
+    ${buttonFilterTemplate}
+  </form>`;
 }
 
 export default class ListFilterView extends AbstractView {
