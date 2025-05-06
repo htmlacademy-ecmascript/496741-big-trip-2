@@ -146,7 +146,9 @@ export default class EditPointView extends AbstractStatefulView {
   #offers;
   #handleRollupButtonClick = null;
   #handleFormSubmit = null;
+  #handieDeleteClick = null;
   #saveButtonElement = null;
+  #deleteButtonElement = null;
   #rollupButtonElement = null;
   #typeInputElements = null;
   #offerInputElements = null;
@@ -154,13 +156,14 @@ export default class EditPointView extends AbstractStatefulView {
   #datepickrFrom = null;
   #datepickrTo = null;
 
-  constructor({point, destinations, offers, onRollupButtonClick, onFormSubmit}) {
+  constructor({point, destinations, offers, onRollupButtonClick, onFormSubmit, onDeleteClick}) {
     super();
     this._setState(EditPointView.parsePointToState(point));
     this.#destinations = destinations;
     this.#offers = offers;
     this.#handleRollupButtonClick = onRollupButtonClick;
     this.#handleFormSubmit = onFormSubmit;
+    this.#handieDeleteClick = onDeleteClick;
 
     this._restoreHandlers();
   }
@@ -192,12 +195,14 @@ export default class EditPointView extends AbstractStatefulView {
   _restoreHandlers() {
     this.#rollupButtonElement = this.element.querySelector('.event__rollup-btn');
     this.#saveButtonElement = this.element.querySelector('.event__save-btn');
+    this.#deleteButtonElement = this.element.querySelector('.event__reset-btn');
     this.#typeInputElements = this.element.querySelector('.event__type-group');
     this.#offerInputElements = this.element.querySelector('.event__available-offers');
     this.#destinationInputElement = this.element.querySelector('.event__input--destination');
 
     this.#rollupButtonElement.addEventListener('click', this.#clickRollupButtonHandler);
     this.#saveButtonElement.addEventListener('click', this.#formSubmitHandler);
+    this.#deleteButtonElement.addEventListener('click', this.#formDeleteHandler);
     this.#typeInputElements.addEventListener('change', this.#typeInputHandler);
     this.#offerInputElements.addEventListener('change', this.#offersChangeHandler);
     this.#destinationInputElement.addEventListener('input', this.#destinationInputHandler);
@@ -259,6 +264,11 @@ export default class EditPointView extends AbstractStatefulView {
   #formSubmitHandler = (evt) => {
     evt.preventDefault();
     this.#handleFormSubmit(EditPointView.parseStateToPoint(this._state));
+  };
+
+  #formDeleteHandler = (evt) => {
+    evt.preventDefault();
+    this.#handieDeleteClick(EditPointView.parseStateToPoint(this._state));
   };
 
   #setDatepickrs() {

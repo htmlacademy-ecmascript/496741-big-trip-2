@@ -119,18 +119,6 @@ export default class BoardPresenter {
     this.#pointPresenters.set(point.id, pointPresenter);
   }
 
-  // #clearTripList() {
-  //   this.#pointPresenters.forEach((presenter) => presenter.destroy());
-  //   this.#pointPresenters.clear();
-  // }
-
-  // #renderTripList() {
-  //   render(this.#listTripComponent, this.#boardContainer);
-  //   this.points.forEach((point) => {
-  //     this.#renderPoint(point);
-  //   });
-  // }
-
   #clearBoard({resetSortType = false} = {}) {
     this.#pointPresenters.forEach((presenter) => presenter.destroy());
     this.#pointPresenters.clear();
