@@ -10,6 +10,9 @@ const SortType = {
 };
 
 const FilterType = {
+  ALL: {
+    name: 'all'
+  },
   EVERYTHING: {
     name: 'everything',
     emptyListMessage: 'Click New Event to create your first point'
