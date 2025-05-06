@@ -3,7 +3,7 @@ import ListSortView from '../view/list-sort-view.js';
 import ListTripView from '../view/list-trip-view.js';
 import ListEmptyView from '../view/list-empty-view.js';
 import PointPresenter from './point-presenter.js';
-import { SortType, UpdateType, UserAction } from '../const.js';
+import { FilterType, SortType, UpdateType, UserAction } from '../const.js';
 import { sortDateUp, sortDescendingCost, sortDurationDown } from '../utils/trip.js';
 import { filter } from '../utils/filter.js';
 
@@ -12,11 +12,12 @@ export default class BoardPresenter {
   #pointsModel = null;
   #filterModel = null;
   #sortListComponent = null;
-  #listEmptyComponent = new ListEmptyView();
+  #listEmptyComponent = null;
   #listTripComponent = new ListTripView();
 
   #pointPresenters = new Map();
   #currentSortType = SortType.DAY;
+  #filterType = FilterType.EVERYTHING;
 
   constructor({boardContainer, pointsModel, filterModel}) {
     this.#boardContainer = boardContainer;
@@ -28,9 +29,9 @@ export default class BoardPresenter {
   }
 
   get points() {
-    const filterType = this.#filterModel.filter;
+    this.#filterType = this.#filterModel.filter;
     const points = this.#pointsModel.points;
-    const filteredPoints = filter[filterType](points);
+    const filteredPoints = filter[this.#filterType](points);
 
     switch(this.#currentSortType) {
       case SortType.DAY:
@@ -117,12 +118,22 @@ export default class BoardPresenter {
     this.#pointPresenters.set(point.id, pointPresenter);
   }
 
+  #renderListEmpty() {
+    this.#listEmptyComponent = new ListEmptyView({
+      filterType: this.#filterType,
+    });
+
+    render(this.#listEmptyComponent, this.#boardContainer);
+  }
+
   #clearBoard({resetSortType = false} = {}) {
     this.#pointPresenters.forEach((presenter) => presenter.destroy());
     this.#pointPresenters.clear();
 
     remove(this.#sortListComponent);
-    remove(this.#listEmptyComponent);
+    if (this.#listEmptyComponent) {
+      remove(this.#listEmptyComponent);
+    }
 
     if (resetSortType) {
       this.#currentSortType = SortType.DAY;
@@ -131,7 +142,7 @@ export default class BoardPresenter {
 
   #renderBoard() {
     if (this.points.length === 0) {
-      render(this.#listEmptyComponent, this.#boardContainer);
+      this.#renderListEmpty();
       return;
     }
 
