@@ -10,25 +10,10 @@ const SortType = {
 };
 
 const FilterType = {
-  ALL: {
-    name: 'all'
-  },
-  EVERYTHING: {
-    name: 'everything',
-    emptyListMessage: 'Click New Event to create your first point'
-  },
-  FUTURE: {
-    name: 'future',
-    emptyListMessage: 'There are no future events now'
-  },
-  PRESENT: {
-    name: 'present',
-    emptyListMessage: 'There are no present events now'
-  },
-  PAST: {
-    name: 'past',
-    emptyListMessage: 'There are no past events now'
-  }
+  EVERYTHING: 'everything',
+  FUTURE: 'future',
+  PRESENT: 'present',
+  PAST: 'past'
 };
 
 const Mode = {

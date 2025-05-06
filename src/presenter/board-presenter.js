@@ -2,10 +2,8 @@ import { remove, render } from '../framework/render.js';
 import ListSortView from '../view/list-sort-view.js';
 import ListTripView from '../view/list-trip-view.js';
 import ListEmptyView from '../view/list-empty-view.js';
-import ListFilterView from '../view/list-filter-view.js';
-import ButtonFilterView from '../view/button-filter-view.js';
 import PointPresenter from './point-presenter.js';
-import { FilterType, SortType, UpdateType, UserAction } from '../const.js';
+import { SortType, UpdateType, UserAction } from '../const.js';
 import { sortDateUp, sortDescendingCost, sortDurationDown } from '../utils/trip.js';
 
 export default class BoardPresenter {
@@ -15,19 +13,14 @@ export default class BoardPresenter {
   #listEmptyComponent = new ListEmptyView();
   #listFilterComponent = null;
   #listTripComponent = new ListTripView();
-  #tripСontrolsFiltersElement = document.querySelector('.trip-controls__filters');
 
   #pointPresenters = new Map();
   #currentSortType = SortType.DAY;
 
-  constructor({boardContainer, pointsModel, filters}) {
+  constructor({boardContainer, pointsModel}) {
     this.#boardContainer = boardContainer;
     this.#pointsModel = pointsModel;
-    this.#listFilterComponent = new ListFilterView({
-      filters,
-      currentFilterType: FilterType.ALL.name,
-      onFilterTypeChange: () => {}
-    });
+
     this.#pointsModel.addObserver(this.#handleModelEvent);
   }
 
@@ -52,7 +45,6 @@ export default class BoardPresenter {
   }
 
   init() {
-    this.#renderFilter();
     this.#renderBoard();
   }
 
@@ -89,11 +81,6 @@ export default class BoardPresenter {
         break;
     }
   };
-
-  #renderFilter() {
-    render(this.#listFilterComponent, this.#tripСontrolsFiltersElement);
-    render(new ButtonFilterView, this.#listFilterComponent.element);
-  }
 
   #handleSortTypeChange = (sortType) => {
     if (this.#currentSortType === sortType) {
