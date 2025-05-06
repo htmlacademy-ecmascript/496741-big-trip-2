@@ -5,35 +5,42 @@ import ListEmptyView from '../view/list-empty-view.js';
 import PointPresenter from './point-presenter.js';
 import { SortType, UpdateType, UserAction } from '../const.js';
 import { sortDateUp, sortDescendingCost, sortDurationDown } from '../utils/trip.js';
+import { filter } from '../utils/filter.js';
 
 export default class BoardPresenter {
   #boardContainer = null;
   #pointsModel = null;
+  #filterModel = null;
   #sortListComponent = null;
   #listEmptyComponent = new ListEmptyView();
-  #listFilterComponent = null;
   #listTripComponent = new ListTripView();
 
   #pointPresenters = new Map();
   #currentSortType = SortType.DAY;
 
-  constructor({boardContainer, pointsModel}) {
+  constructor({boardContainer, pointsModel, filterModel}) {
     this.#boardContainer = boardContainer;
     this.#pointsModel = pointsModel;
+    this.#filterModel = filterModel;
 
     this.#pointsModel.addObserver(this.#handleModelEvent);
+    this.#filterModel.addObserver(this.#handleModelEvent);
   }
 
   get points() {
+    const filterType = this.#filterModel.filter;
+    const points = this.#pointsModel.points;
+    const filteredPoints = filter[filterType](points);
+
     switch(this.#currentSortType) {
       case SortType.DAY:
-        return [...this.#pointsModel.points].sort(sortDateUp);
+        return filteredPoints.sort(sortDateUp);
       case SortType.PRICE:
-        return [...this.#pointsModel.points].sort(sortDescendingCost);
+        return filteredPoints.sort(sortDescendingCost);
       case SortType.TIME:
-        return [...this.#pointsModel.points].sort(sortDurationDown);
+        return filteredPoints.sort(sortDurationDown);
     }
-    return this.#pointsModel.points;
+    return filteredPoints;
   }
 
   get destinations() {
