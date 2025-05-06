@@ -5,7 +5,7 @@ import ListEmptyView from '../view/list-empty-view.js';
 import ListFilterView from '../view/list-filter-view.js';
 import ButtonFilterView from '../view/button-filter-view.js';
 import PointPresenter from './point-presenter.js';
-import { SortType, UpdateType, UserAction } from '../const.js';
+import { FilterType, SortType, UpdateType, UserAction } from '../const.js';
 import { sortDateUp, sortDescendingCost, sortDurationDown } from '../utils/trip.js';
 
 export default class BoardPresenter {
@@ -23,7 +23,11 @@ export default class BoardPresenter {
   constructor({boardContainer, pointsModel, filters}) {
     this.#boardContainer = boardContainer;
     this.#pointsModel = pointsModel;
-    this.#listFilterComponent = new ListFilterView({filters});
+    this.#listFilterComponent = new ListFilterView({
+      filters,
+      currentFilterType: FilterType.ALL.name,
+      onFilterTypeChange: () => {}
+    });
     this.#pointsModel.addObserver(this.#handleModelEvent);
   }
 
