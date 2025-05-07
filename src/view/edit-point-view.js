@@ -42,6 +42,14 @@ function createDestinationOptionsTemplate(destinations) {
   return destinations.map((destination) => `<option value=${destination.name}></option>`).join('');
 }
 
+function createPicturesTemplate(pictures) {
+  return `<div class="event__photos-container">
+            <div class="event__photos-tape">
+              ${pictures.map((picture) => `<img class="event__photo" src="${picture.src}" alt="${picture.description}">`).join('')}
+            </div>
+          </div>`;
+}
+
 function createEditPointTemplate(point, destinations, offers) {
 
   const {
@@ -54,8 +62,7 @@ function createEditPointTemplate(point, destinations, offers) {
     offers: selectedOffers
   } = point;
 
-  const {description, name} = destinations.find((itemDestination) => itemDestination.id === destination);
-
+  const {description, name, pictures} = destinations.find((itemDestination) => itemDestination.id === destination);
 
   const offer = offers.find((faundOffer) => faundOffer.type === type);
 
@@ -65,6 +72,7 @@ function createEditPointTemplate(point, destinations, offers) {
   const offersTemplate = createOffersTemplate(offer.offers, selectedOffers);
   const eventTypeItemsTemplate = createEventTypeItemsTemplate(type);
   const destinationOptionsTemplate = createDestinationOptionsTemplate(destinations);
+  const picturesTemplate = pictures.length !== 0 ? createPicturesTemplate(pictures) : '';
 
   return `<li class="trip-events__item">
     <form class="event event--edit" action="#" method="post">
@@ -103,10 +111,22 @@ function createEditPointTemplate(point, destinations, offers) {
 
         <div class="event__field-group  event__field-group--time">
           <label class="visually-hidden" for="event-start-time-1">From</label>
-          <input class="event__input  event__input--time" id="event-start-time-1" type="text" name="event-start-time" value=${dateFromDataAndTime}>
+          <input
+            class="event__input  event__input--time"
+            id="event-start-time-1"
+            type="text"
+            name="event-start-time"
+            value=${dateFromDataAndTime}
+          >
           &mdash;
           <label class="visually-hidden" for="event-end-time-1">To</label>
-          <input class="event__input  event__input--time" id="event-end-time-1" type="text" name="event-end-time" value=${dateaToDateAndTime}>
+          <input
+            class="event__input  event__input--time"
+            id="event-end-time-1"
+            type="text"
+            name="event-end-time"
+            value=${dateaToDateAndTime}
+          >
         </div>
 
         <div class="event__field-group  event__field-group--price">
@@ -141,6 +161,7 @@ function createEditPointTemplate(point, destinations, offers) {
         <section class="event__section  event__section--destination">
           <h3 class="event__section-title  event__section-title--destination">Destination</h3>
           <p class="event__destination-description">${description}</p>
+          ${picturesTemplate}
         </section>
       </section>
     </form>

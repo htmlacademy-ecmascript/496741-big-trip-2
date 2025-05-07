@@ -36,6 +36,7 @@ function handleNewPointFormClose() {
 }
 
 function handleNewPointButtonClick() {
+  boardPresenter.createPoint();
   newPointButtonComponent.element.disabled = true;
 }
 render(newPointButtonComponent, siteHeaderElement);

@@ -1,49 +1,50 @@
 import { KeyCode, UpdateType, UserAction } from '../const.js';
-import { remove, render } from '../framework/render.js';
-import EditPointView from '../view/edit-point-view.js';
-import { nanoid } from 'nanoid';
+import { remove, render, RenderPosition } from '../framework/render.js';
+import AddNewPointView from '../view/add-new-point-view.js';
 
 export default class NewPointPresenter {
+  #destinations = null;
+  #offers = null;
   #pointListContainer = null;
   #handleDataChange = null;
   #handleDestroy = null;
 
-  #editPointComponent = null;
+  #addNewPointComponent = null;
 
-  constructor({pointListContainer, onDataChange, onDestroy}) {
+  constructor({destinations, offers, pointListContainer, onDataChange, onDestroy}) {
+    this.#destinations = destinations;
+    this.#offers = offers;
     this.#pointListContainer = pointListContainer;
     this.#handleDataChange = onDataChange;
     this.#handleDestroy = onDestroy;
   }
 
   init() {
-    if (this.#editPointComponent !== null) {
+    if (this.#addNewPointComponent !== null) {
       return;
     }
 
-    this.#editPointComponent = new EditPointView({
-      // point: this.#point,
-      // destinations: this.#destinations,
-      // offers: this.#offers,
-      // onRollupButtonClick: this.#replaceFormToCard,
+    this.#addNewPointComponent = new AddNewPointView({
+      destinations: this.#destinations,
+      offers: this.#offers,
       onFormSubmit: this.#handleFormSubmit,
       onDeleteClick: this.#handleDeleteClick,
     });
 
-    render(this.#editPointComponent, this.#pointListContainer);
+    render(this.#addNewPointComponent, this.#pointListContainer, RenderPosition.AFTERBEGIN);
 
     document.addEventListener('keydown', this.#escKeyDownHandler);
   }
 
   destroy() {
-    if (this.#editPointComponent === null) {
+    if (this.#addNewPointComponent === null) {
       return;
     }
 
     this.#handleDestroy();
 
-    remove(this.#editPointComponent);
-    this.#editPointComponent = null;
+    remove(this.#addNewPointComponent);
+    this.#addNewPointComponent = null;
 
     document.removeEventListener('keydown', this.#escKeyDownHandler);
   }
@@ -52,7 +53,7 @@ export default class NewPointPresenter {
     this.#handleDataChange(
       UserAction.ADD_POINT,
       UpdateType.MINOR,
-      {id: nanoid(), ...point}
+      point,
     );
 
     this.destroy();
