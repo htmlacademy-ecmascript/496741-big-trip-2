@@ -180,6 +180,7 @@ export default class EditPointView extends AbstractStatefulView {
   #typeInputElements = null;
   #offerInputElements = null;
   #destinationInputElement = null;
+  #priceInputElement = null;
   #datepickrFrom = null;
   #datepickrTo = null;
 
@@ -226,6 +227,7 @@ export default class EditPointView extends AbstractStatefulView {
     this.#typeInputElements = this.element.querySelector('.event__type-group');
     this.#offerInputElements = this.element.querySelector('.event__available-offers');
     this.#destinationInputElement = this.element.querySelector('.event__input--destination');
+    this.#priceInputElement = this.element.querySelector('.event__input--price');
 
     this.#rollupButtonElement.addEventListener('click', this.#clickRollupButtonHandler);
     this.#saveButtonElement.addEventListener('click', this.#formSubmitHandler);
@@ -233,6 +235,7 @@ export default class EditPointView extends AbstractStatefulView {
     this.#typeInputElements.addEventListener('change', this.#typeInputHandler);
     this.#offerInputElements.addEventListener('change', this.#offersChangeHandler);
     this.#destinationInputElement.addEventListener('input', this.#destinationInputHandler);
+    this.#priceInputElement.addEventListener('input', this.#priceInputHandler);
 
     this.#setDatepickrs();
   }
@@ -268,6 +271,13 @@ export default class EditPointView extends AbstractStatefulView {
     );
     this.updateElement({
       destination: newDestination.id,
+    });
+  };
+
+  #priceInputHandler = (evt) => {
+    evt.preventDefault();
+    this._setState({
+      basePrice: evt.target.value,
     });
   };
 

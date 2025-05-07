@@ -1,3 +1,4 @@
+import flatpickr from 'flatpickr';
 import { DateFormat, WAYPOINTS } from '../const.js';
 import AbstractStatefulView from '../framework/view/abstract-stateful-view.js';
 import createNewPoint from '../model/point-model.js';
@@ -136,6 +137,7 @@ function createAddNewPointTemplate(point, destinations, allOffers) {
                     class="event__input  event__input--price"
                     id="event-price-1"
                     type="text"
+                    oninput="this.value = this.value.replace(/[^0-9]/g, '')"
                     name="event-price"
                     value="${basePrice}"
                   >
@@ -172,9 +174,12 @@ export default class AddNewPointView extends AbstractStatefulView {
   #typeInputElements = null;
   #offerInputElements = null;
   #destinationInputElement = null;
+  #priceInputElement = null;
   #saveButtonElement = null;
   #deleteButtonElement = null;
   #selectedDestinationId = null;
+  #datepickrFrom = null;
+  #datepickrTo = null;
 
   constructor({destinations, offers, onFormSubmit, onDeleteClick}) {
     super();
@@ -196,6 +201,16 @@ export default class AddNewPointView extends AbstractStatefulView {
 
   removeElement() {
     super.removeElement();
+
+    if(this.#datepickrFrom) {
+      this.#datepickrFrom.destroy();
+      this.#datepickrFrom = null;
+    }
+
+    if(this.#datepickrTo) {
+      this.#datepickrTo.destroy();
+      this.#datepickrTo = null;
+    }
   }
 
   reset(point) {
@@ -208,14 +223,18 @@ export default class AddNewPointView extends AbstractStatefulView {
     this.#typeInputElements = this.element.querySelector('.event__type-group');
     this.#offerInputElements = this.element.querySelector('.event__available-offers');
     this.#destinationInputElement = this.element.querySelector('.event__input--destination');
+    this.#priceInputElement = this.element.querySelector('.event__input--price');
     this.#saveButtonElement = this.element.querySelector('.event__save-btn');
     this.#deleteButtonElement = this.element.querySelector('.event__reset-btn');
 
     this.#typeInputElements.addEventListener('change', this.#typeInputHandler);
     this.#offerInputElements.addEventListener('change', this.#offersChangeHandler);
     this.#destinationInputElement.addEventListener('input', this.#destinationInputHandler);
+    this.#priceInputElement.addEventListener('input', this.#priceInputHandler);
     this.#saveButtonElement.addEventListener('click', this.#formSubmitHandler);
     this.#deleteButtonElement.addEventListener('click', this.#formDeleteHandler);
+
+    this.#setDatepickrs();
   }
 
   #typeInputHandler = (evt) => {
@@ -251,6 +270,57 @@ export default class AddNewPointView extends AbstractStatefulView {
       destination: newDestination.id,
     });
   };
+
+  #priceInputHandler = (evt) => {
+    evt.preventDefault();
+    this._setState({
+      basePrice: evt.target.value,
+    });
+  };
+
+  #dateFromCloseHandler = ([date]) => {
+    this.updateElement({
+      dateFrom: date,
+    });
+  };
+
+  #dateToCloseHandler = ([date]) => {
+    this.updateElement({
+      dateTo: date,
+    });
+  };
+
+  #setDatepickrs() {
+    const dateFromElement = this.element.querySelector('#event-start-time-1');
+    const dateToElement = this.element.querySelector('#event-end-time-1');
+
+    const commonConfig = {
+      dateFormat: 'd/m/y H:i',
+      enableTime: true,
+      locale: {firstDayOfWeek: 1},
+      'time_24hr': true
+    };
+
+    this.#datepickrFrom = flatpickr(
+      dateFromElement,
+      {
+        ...commonConfig,
+        defaultDate: this._state.dateFrom,
+        onClose: this.#dateFromCloseHandler,
+        maxDate: this._state.dateTo
+      }
+    );
+
+    this.#datepickrTo = flatpickr(
+      dateToElement,
+      {
+        ...commonConfig,
+        defaultDate: this._state.dateTo,
+        onClose: this.#dateToCloseHandler,
+        minDate: this._state.dateFrom
+      }
+    );
+  }
 
   #formSubmitHandler = (evt) => {
     evt.preventDefault();
