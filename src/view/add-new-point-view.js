@@ -175,7 +175,6 @@ export default class AddNewPointView extends AbstractStatefulView {
   #saveButtonElement = null;
   #deleteButtonElement = null;
   #selectedDestinationId = null;
-  #newPoint = null;
 
   constructor({destinations, offers, onFormSubmit, onDeleteClick}) {
     super();
@@ -185,14 +184,14 @@ export default class AddNewPointView extends AbstractStatefulView {
     this.#handieDeleteClick = onDeleteClick;
 
     this.#selectedDestinationId = this.#destinations[0].id;
-    this.#newPoint = createNewPoint(this.#selectedDestinationId);
+    const newPoint = createNewPoint(this.#selectedDestinationId);
 
-    this._setState(AddNewPointView.parsePointToState(this.#newPoint));
+    this._setState(AddNewPointView.parsePointToState(newPoint));
     this._restoreHandlers();
   }
 
   get template() {
-    return createAddNewPointTemplate(this.#newPoint, this.#destinations, this.#offers);
+    return createAddNewPointTemplate(this._state, this.#destinations, this.#offers);
   }
 
   removeElement() {
