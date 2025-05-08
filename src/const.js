@@ -10,22 +10,17 @@ const SortType = {
 };
 
 const FilterType = {
-  EVERYTHING: {
-    name: 'everything',
-    emptyListMessage: 'Click New Event to create your first point'
-  },
-  FUTURE: {
-    name: 'future',
-    emptyListMessage: 'There are no future events now'
-  },
-  PRESENT: {
-    name: 'present',
-    emptyListMessage: 'There are no present events now'
-  },
-  PAST: {
-    name: 'past',
-    emptyListMessage: 'There are no past events now'
-  }
+  EVERYTHING: 'everything',
+  FUTURE: 'future',
+  PRESENT: 'present',
+  PAST: 'past'
+};
+
+const NoPointsTextType = {
+  [FilterType.EVERYTHING]: 'Click New Event to create your first point',
+  [FilterType.PAST]: 'There are no past events now',
+  [FilterType.PRESENT]: 'There are no present events now',
+  [FilterType.FUTURE]: 'There are no future events now'
 };
 
 const Mode = {
@@ -40,8 +35,7 @@ const ErrorText = {
 
 const KeyCode = {
   ESCAPE: 'Escape',
-  ENTER: 'Enter',
-  TAB: 'Tab'
+  ESC: 'Esc',
 };
 
 const DateFormat = {
@@ -51,4 +45,29 @@ const DateFormat = {
   TIME: 'HH:mm'
 };
 
-export { POINTS_COUNT, WAYPOINTS, FilterType, ErrorText, DateFormat, KeyCode, Mode, SortType };
+
+const UserAction = {
+  UPDATE_POINT: 'UPDATE_POINT',
+  ADD_POINT: 'ADD_POINT',
+  DELETE_POINT: 'DELETE_POINT',
+};
+
+const UpdateType = {
+  PATCH: 'PATCH',
+  MINOR: 'MINOR',
+  MAJOR: 'MAJOR',
+};
+
+export {
+  POINTS_COUNT,
+  WAYPOINTS,
+  FilterType,
+  NoPointsTextType,
+  ErrorText,
+  DateFormat,
+  KeyCode,
+  Mode,
+  SortType,
+  UserAction,
+  UpdateType
+};
