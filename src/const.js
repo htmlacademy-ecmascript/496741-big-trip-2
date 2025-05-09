@@ -1,5 +1,15 @@
 const POINTS_COUNT = 5;
-const WAYPOINTS = ['taxi', 'bus', 'train', 'ship', 'drive', 'flight', 'check-in', 'sightseeing', 'restaurant'];
+const WaypointType = {
+  TAXY: 'taxi',
+  BUS: 'bus',
+  TRAYN: 'train',
+  SHIP: 'ship',
+  DRIVE: 'drive',
+  FLIGHT: 'flight',
+  CHECK_IN: 'check-in',
+  SIGHTSEEING: 'sightseeing',
+  RESTAURANT: 'restaurant'
+};
 
 const Method = {
   GET: 'GET',
@@ -83,7 +93,7 @@ export {
   TimeLimit,
   Url,
   POINTS_COUNT,
-  WAYPOINTS,
+  WaypointType,
   FilterType,
   NoPointsTextType,
   ErrorText,

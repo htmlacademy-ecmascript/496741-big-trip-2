@@ -1,11 +1,11 @@
 import flatpickr from 'flatpickr';
-import { DateFormat, WAYPOINTS } from '../const.js';
+import { DateFormat, WaypointType } from '../const.js';
 import AbstractStatefulView from '../framework/view/abstract-stateful-view.js';
 import createNewPoint from '../model/point-model.js';
 import { humanizeDate } from '../utils/trip.js';
 
 function createEventTypeItemsTemplate(selectedType) {
-  return WAYPOINTS.map((type) => `<div class="event__type-item">
+  return Object.values(WaypointType).map((type) => `<div class="event__type-item">
     <input
       id="event-type-${type}-1"
       class="event__type-input  visually-hidden"
