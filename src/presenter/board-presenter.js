@@ -8,7 +8,7 @@ import { FilterType, SortType, TimeLimit, UpdateType, UserAction } from '../cons
 import { sortDateUp, sortDescendingCost, sortDurationDown } from '../utils/trip.js';
 import { filter } from '../utils/filter.js';
 import LoadingView from '../view/loading-view.js';
-import UiBlocker from '../framework/ui-blocker';
+import UiBlocker from '../framework/ui-blocker/ui-blocker.js';
 
 export default class BoardPresenter {
   #boardContainer = null;
