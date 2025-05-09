@@ -13,7 +13,7 @@ export default class PointsModel extends Observable {
     this.#pointsApiService = pointsApiService;
 
     this.#pointsApiService.points.then((points) => {
-      console.log(points);
+      console.log(points.map(this.#adaptPointToClient));
     });
   }
 
@@ -67,5 +67,22 @@ export default class PointsModel extends Observable {
     ];
 
     this._notify(updateType);
+  }
+
+  #adaptPointToClient(point) {
+    const adaptedPoint = {
+      ...point,
+      basePrice: point['base_price'],
+      dateFrom: point['date_from'],
+      dateTo: point['date_to'],
+      isFavorite: point['is_favorite'],
+    };
+
+    delete adaptedPoint['base_price'];
+    delete adaptedPoint['date_from'];
+    delete adaptedPoint['date_to'];
+    delete adaptedPoint['is_favorite'];
+
+    return adaptedPoint;
   }
 }
