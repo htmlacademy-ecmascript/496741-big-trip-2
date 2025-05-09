@@ -15,6 +15,14 @@ export default class PointsModel extends Observable {
     this.#pointsApiService.points.then((points) => {
       console.log(points.map(this.#adaptPointToClient));
     });
+
+    this.#pointsApiService.destinations.then((destinations) => {
+      console.log(destinations);
+    });
+
+    this.#pointsApiService.offers.then((offers) => {
+      console.log(offers);
+    });
   }
 
   get points() {

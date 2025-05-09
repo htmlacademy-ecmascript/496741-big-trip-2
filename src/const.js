@@ -6,6 +6,12 @@ const Method = {
   PUT: 'PUT',
 };
 
+const Url = {
+  POINTS: 'points',
+  DESTINATIONS: 'destinations',
+  OFFERS: 'offers',
+};
+
 const SortType = {
   DAY: 'day',
   EVENT: 'event',
@@ -65,6 +71,7 @@ const UpdateType = {
 
 export {
   Method,
+  Url,
   POINTS_COUNT,
   WAYPOINTS,
   FilterType,

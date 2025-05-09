@@ -1,16 +1,24 @@
 import ApiService from './framework/api-service';
-import { Method } from './const.js';
+import { Method, Url } from './const.js';
 
 export default class PointsApiService extends ApiService {
   get points() {
-    return this._load({url: 'points'}).then(ApiService.parseResponse);
+    return this._load({url: Url.POINTS}).then(ApiService.parseResponse);
+  }
+
+  get destinations() {
+    return this._load({url: Url.DESTINATIONS}).then(ApiService.parseResponse);
+  }
+
+  get offers() {
+    return this._load({url: Url.OFFERS}).then(ApiService.parseResponse);
   }
 
   async updatePoint(point) {
     const response = await this._load({
       url: `points/${point.id}`,
       method: Method.PUT,
-      body: JSON.stringify(this.#adaptToServer(point)),
+      body: JSON.stringify(this.#adaptPointToServer(point)),
       headers: new Headers({'Content-Type': 'application/json'}),
     });
 
@@ -19,7 +27,7 @@ export default class PointsApiService extends ApiService {
     return parsedResponse;
   }
 
-  #adaptToServer(point) {
+  #adaptPointToServer(point) {
     const adaptedPoint = {
       ...point,
       'base_price': point.basePrice,
