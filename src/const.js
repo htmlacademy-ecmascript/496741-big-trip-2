@@ -8,6 +8,12 @@ const Method = {
   DELETE: 'DELETE',
 };
 
+
+const TimeLimit = {
+  LOWER_LIMIT: 350,
+  UPPER_LIMIT: 1000,
+};
+
 const Url = {
   POINTS: 'points',
   DESTINATIONS: 'destinations',
@@ -74,6 +80,7 @@ const UpdateType = {
 
 export {
   Method,
+  TimeLimit,
   Url,
   POINTS_COUNT,
   WAYPOINTS,
