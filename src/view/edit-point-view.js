@@ -59,7 +59,10 @@ function createEditPointTemplate(point, destinations, offers) {
     dateTo,
     destination,
     type,
-    offers: selectedOffers
+    offers: selectedOffers,
+    isDisabled,
+    isSaving,
+    isDeleting
   } = point;
 
   const {description, name, pictures} = destinations.find((itemDestination) => itemDestination.id === destination);
@@ -143,8 +146,12 @@ function createEditPointTemplate(point, destinations, offers) {
             value="${basePrice}">
         </div>
 
-        <button class="event__save-btn  btn  btn--blue" type="submit">Save</button>
-        <button class="event__reset-btn" type="reset">Delete</button>
+        <button class="event__save-btn  btn  btn--blue" type="submit" ${isDisabled ? 'disabled' : ''}>
+          ${ isSaving ? 'Saving' : 'Save'}
+        </button>
+        <button class="event__reset-btn" type="reset" ${isDisabled ? 'disabled' : ''}>
+          ${ isDeleting ? 'Deleting' : 'Delete'}
+        </button>
         <button class="event__rollup-btn" type="button">
           <span class="visually-hidden">Open event</span>
         </button>
@@ -341,11 +348,20 @@ export default class EditPointView extends AbstractStatefulView {
   }
 
   static parsePointToState(point) {
-    return {...point};
+    return {
+      ...point,
+      isDisabled: false,
+      isSaving: false,
+      isDeleting: false,
+    };
   }
 
   static parseStateToPoint(state) {
     const point = {...state};
+
+    delete point.isDisabled;
+    delete point.isSaving;
+    delete point.isDeleting;
 
     return point;
   }

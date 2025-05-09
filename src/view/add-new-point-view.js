@@ -59,6 +59,9 @@ function createAddNewPointTemplate(point, destinations, allOffers) {
     destination,
     offers,
     type,
+    isDisabled,
+    isSaving,
+    isDeleting
   } = point;
 
   const {description, name, pictures} = destinations.find(
@@ -143,7 +146,9 @@ function createAddNewPointTemplate(point, destinations, allOffers) {
                   >
                 </div>
 
-                <button class="event__save-btn  btn  btn--blue" type="submit">Save</button>
+                <button class="event__save-btn  btn  btn--blue" type="submit" ${isDisabled ? 'disabled' : ''}>
+                  ${ isSaving ? 'Saving' : 'Save'}
+                </button>
                 <button class="event__reset-btn" type="reset">Cancel</button>
               </header>
               <section class="event__details">
@@ -335,11 +340,20 @@ export default class AddNewPointView extends AbstractStatefulView {
   };
 
   static parsePointToState(point) {
-    return {...point};
+    return {
+      ...point,
+      isDisabled: false,
+      isSaving: false,
+      isDeleting: false,
+    };
   }
 
   static parseStateToPoint(state) {
     const point = {...state};
+
+    delete point.isDisabled;
+    delete point.isSaving;
+    delete point.isDeleting;
 
     return point;
   }
