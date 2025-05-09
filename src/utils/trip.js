@@ -30,6 +30,10 @@ const sortDurationDown = (a, b) => {
   return durationB - durationA;
 };
 
+function isSecondDateAfter(firstDate, secondDate) {
+  return dayjs(secondDate).isAfter(dayjs(firstDate));
+}
+
 export {
   humanizeDate,
   findTimeInterval,
@@ -37,5 +41,6 @@ export {
   isPastDate,
   sortDescendingCost,
   sortDateUp,
-  sortDurationDown
+  sortDurationDown,
+  isSecondDateAfter,
 };

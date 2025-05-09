@@ -1,5 +1,6 @@
 import { KeyCode, Mode, UpdateType, UserAction } from '../const';
 import { remove, render, replace } from '../framework/render.js';
+import { isSecondDateAfter } from '../utils/trip.js';
 import EditPointView from '../view/edit-point-view.js';
 import PointView from '../view/point-view.js';
 
@@ -144,11 +145,25 @@ export default class PointPresenter {
   };
 
   #handleFormSubmit = (update) => {
+    if (!this.#validatePoint(update)) {
+      this.setAborting();
+      return;
+    }
     this.#handleDataChange(
       UserAction.UPDATE_POINT,
       UpdateType.MINOR,
       update
     );
+  };
+
+  #validatePoint = (point) => {
+    if (point.basePrice <= 0 || point.basePrice > 10000) {
+      return false;
+    }
+    if (!isSecondDateAfter(point.dateFrom, point.dateTo)) {
+      return false;
+    }
+    return true;
   };
 
   #handleDeleteClick = (point) => {
