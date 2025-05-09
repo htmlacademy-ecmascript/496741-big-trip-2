@@ -1,6 +1,17 @@
 const POINTS_COUNT = 5;
 const WAYPOINTS = ['taxi', 'bus', 'train', 'ship', 'drive', 'flight', 'check-in', 'sightseeing', 'restaurant'];
 
+const Method = {
+  GET: 'GET',
+  PUT: 'PUT',
+};
+
+const Url = {
+  POINTS: 'points',
+  DESTINATIONS: 'destinations',
+  OFFERS: 'offers',
+};
+
 const SortType = {
   DAY: 'day',
   EVENT: 'event',
@@ -56,9 +67,12 @@ const UpdateType = {
   PATCH: 'PATCH',
   MINOR: 'MINOR',
   MAJOR: 'MAJOR',
+  INIT: 'INIT',
 };
 
 export {
+  Method,
+  Url,
   POINTS_COUNT,
   WAYPOINTS,
   FilterType,

@@ -7,6 +7,7 @@ import NewPointPresenter from './new-point-presenter.js';
 import { FilterType, SortType, UpdateType, UserAction } from '../const.js';
 import { sortDateUp, sortDescendingCost, sortDurationDown } from '../utils/trip.js';
 import { filter } from '../utils/filter.js';
+import LoadingView from '../view/loading-view.js';
 
 export default class BoardPresenter {
   #boardContainer = null;
@@ -14,12 +15,15 @@ export default class BoardPresenter {
   #filterModel = null;
   #sortListComponent = null;
   #listEmptyComponent = null;
+
   #pointListComponent = new ListTripView();
+  #loadingComponent = new LoadingView();
 
   #pointPresenters = new Map();
   #newPointPresenter = null;
   #currentSortType = SortType.DAY;
   #filterType = FilterType.EVERYTHING;
+  #isLoading = true;
 
   constructor({boardContainer, pointsModel, filterModel, onNewPointDestroy}) {
     this.#boardContainer = boardContainer;
@@ -104,6 +108,11 @@ export default class BoardPresenter {
         this.#clearBoard({resetSortType: true});
         this.#renderBoard();
         break;
+      case UpdateType.INIT:
+        this.#isLoading = false;
+        remove(this.#loadingComponent);
+        this.#renderBoard();
+        break;
     }
   };
 
@@ -135,6 +144,10 @@ export default class BoardPresenter {
     this.#pointPresenters.set(point.id, pointPresenter);
   }
 
+  #renderLoading() {
+    render (this.#loadingComponent, this.#boardContainer);
+  }
+
   #renderListEmpty() {
     this.#listEmptyComponent = new ListEmptyView({
       filterType: this.#filterType,
@@ -149,6 +162,8 @@ export default class BoardPresenter {
     this.#pointPresenters.clear();
 
     remove(this.#sortListComponent);
+    remove(this.#loadingComponent);
+
     if (this.#listEmptyComponent) {
       remove(this.#listEmptyComponent);
     }
@@ -159,6 +174,11 @@ export default class BoardPresenter {
   }
 
   #renderBoard() {
+    if (this.#isLoading) {
+      this.#renderLoading();
+      return;
+    }
+
     if (this.points.length === 0) {
       this.#renderListEmpty();
       return;
