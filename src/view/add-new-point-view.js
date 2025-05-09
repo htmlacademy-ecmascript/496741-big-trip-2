@@ -341,7 +341,6 @@ export default class AddNewPointView extends AbstractStatefulView {
       ...point,
       isDisabled: false,
       isSaving: false,
-      isDeleting: false,
     };
   }
 
@@ -350,7 +349,6 @@ export default class AddNewPointView extends AbstractStatefulView {
 
     delete point.isDisabled;
     delete point.isSaving;
-    delete point.isDeleting;
 
     return point;
   }
