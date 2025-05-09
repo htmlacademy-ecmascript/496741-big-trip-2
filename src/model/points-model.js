@@ -1,11 +1,21 @@
 import Observable from '../framework/observable';
-import { mockDestinations, mockOffers } from '../mock/mock';
-import { mockPoints } from '../mock/mock';
+import { mockDestinations, mockOffers } from '../mock/mock.js';
+import { mockPoints } from '../mock/mock.js';
 
 export default class PointsModel extends Observable {
+  #pointsApiService = null;
   #points = mockPoints.sort(() => Math.random() - 0.5);
   #destinations = mockDestinations;
   #offers = mockOffers;
+
+  constructor({pointsApiService}) {
+    super();
+    this.#pointsApiService = pointsApiService;
+
+    this.#pointsApiService.points.then((points) => {
+      console.log(points);
+    });
+  }
 
   get points() {
     return this.#points;

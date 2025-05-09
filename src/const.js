@@ -1,6 +1,11 @@
 const POINTS_COUNT = 5;
 const WAYPOINTS = ['taxi', 'bus', 'train', 'ship', 'drive', 'flight', 'check-in', 'sightseeing', 'restaurant'];
 
+const Method = {
+  GET: 'GET',
+  PUT: 'PUT',
+};
+
 const SortType = {
   DAY: 'day',
   EVENT: 'event',
@@ -59,6 +64,7 @@ const UpdateType = {
 };
 
 export {
+  Method,
   POINTS_COUNT,
   WAYPOINTS,
   FilterType,
