@@ -60,8 +60,7 @@ function createAddNewPointTemplate(point, destinations, allOffers) {
     offers,
     type,
     isDisabled,
-    isSaving,
-    isDeleting
+    isSaving
   } = point;
 
   const {description, name, pictures} = destinations.find(
