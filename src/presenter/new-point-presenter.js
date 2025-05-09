@@ -24,6 +24,8 @@ export default class NewPointPresenter {
       return;
     }
 
+    console.log(this.#destinations);
+
     this.#addNewPointComponent = new AddNewPointView({
       destinations: this.#destinations,
       offers: this.#offers,
