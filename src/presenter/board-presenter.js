@@ -30,8 +30,6 @@ export default class BoardPresenter {
     this.#pointsModel = pointsModel;
     this.#filterModel = filterModel;
 
-    console.log(this.#pointsModel);
-
     this.#newPointPresenter = new NewPointPresenter({
       destinations: this.#pointsModel.destinations,
       offers: this.#pointsModel.offers,

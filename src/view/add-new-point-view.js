@@ -192,8 +192,6 @@ export default class AddNewPointView extends AbstractStatefulView {
     this.#handleFormSubmit = onFormSubmit;
     this.#handieDeleteClick = onDeleteClick;
 
-    console.log(this.#destinations);
-
     this.#selectedDestinationId = this.#destinations[0].id;
     const newPoint = createNewPoint(this.#selectedDestinationId);
 
