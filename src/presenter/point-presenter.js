@@ -58,7 +58,8 @@ export default class PointPresenter {
     }
 
     if(this.#mode === Mode.EDITING) {
-      replace(this.#editPointComponent, prevEditPointComponent);
+      replace(this.#pointComponent, prevEditPointComponent);
+      this.#mode = Mode.DEFAULT;
     }
 
     remove(prevPointComponent);
@@ -131,7 +132,6 @@ export default class PointPresenter {
       UpdateType.MINOR,
       update
     );
-    this.#replaceFormToCard();
   };
 
   #handleDeleteClick = (point) => {
