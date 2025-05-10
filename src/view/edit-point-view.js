@@ -68,7 +68,7 @@ function createEditPointTemplate(point, destinations, offers) {
     (itemDestination) => itemDestination.id === destination
   ) : null;
 
-  const offer = offers.find((faundOffer) => faundOffer.type === type);
+  const offer = offers.find((foundOffer) => foundOffer.type === type);
 
   const dateFromDataAndTime = humanizeDate(dateFrom, DateFormat.DATE_AND_TIME);
   const dateaToDateAndTime = humanizeDate(dateTo, DateFormat.DATE_AND_TIME);
@@ -169,7 +169,9 @@ function createEditPointTemplate(point, destinations, offers) {
 
         <section class="event__section  event__section--destination">
           <h3 class="event__section-title  event__section-title--destination">Destination</h3>
-          <p class="event__destination-description">${destination ? selectedDestination.description : ''}</p>
+          <p class="event__destination-description">
+            ${destination ? selectedDestination.description : ''}
+          </p>
           ${picturesTemplate}
         </section>
       </section>
@@ -273,16 +275,16 @@ export default class EditPointView extends AbstractStatefulView {
   #destinationInputHandler = (evt) => {
     evt.preventDefault();
     const inputDestination = evt.target.value;
-    const faundDestination = this.#destinations.find(
+    const foundDestination = this.#destinations.find(
       (destination) => destination.name === inputDestination
     );
 
-    if (inputDestination !== '' && !faundDestination) {
+    if (inputDestination !== '' && !foundDestination) {
       return;
     }
 
     this.updateElement({
-      destination: faundDestination ? faundDestination.id : null,
+      destination: foundDestination ? foundDestination.id : null,
     });
   };
 

@@ -63,9 +63,9 @@ function createAddNewPointTemplate(point, destinations, allOffers) {
     isSaving
   } = point;
 
-  const {description, name, pictures} = destinations.find(
+  const selectedDestination = destination ? destinations.find(
     (itemDestination) => itemDestination.id === destination
-  );
+  ) : null;
 
   const dateFromDataAndTime = humanizeDate(dateFrom, DateFormat.DATE_AND_TIME);
   const dateaToDateAndTime = humanizeDate(dateTo, DateFormat.DATE_AND_TIME);
@@ -74,7 +74,8 @@ function createAddNewPointTemplate(point, destinations, allOffers) {
   const eventTypeItemsTemplate = createEventTypeItemsTemplate(type);
   const destinationOptionsTemplate = createDestinationOptionsTemplate(destinations);
   const offersTemplate = createOffersTemplate(offer.offers, offers);
-  const picturesTemplate = pictures.length !== 0 ? createPicturesTemplate(pictures) : '';
+  const picturesTemplate = (destination && selectedDestination.pictures.length !== 0)
+    ? createPicturesTemplate(selectedDestination.pictures) : '';
 
   return `<li class="trip-events__item">
             <form class="event event--edit" action="#" method="post">
@@ -103,7 +104,7 @@ function createAddNewPointTemplate(point, destinations, allOffers) {
                     id="event-destination-1"
                     type="text"
                     name="event-destination"
-                    value="${name}"
+                    value="${destination ? selectedDestination.name : ''}"
                     list="destination-list-1"
                   >
                   <datalist id="destination-list-1">
@@ -161,7 +162,9 @@ function createAddNewPointTemplate(point, destinations, allOffers) {
 
                 <section class="event__section  event__section--destination">
                   <h3 class="event__section-title  event__section-title--destination">Destination</h3>
-                  <p class="event__destination-description">${description}</p>
+                  <p class="event__destination-description">
+                    ${destination ? selectedDestination.description : ''}
+                  </p>
                   ${picturesTemplate}
                 </section>
               </section>
@@ -181,7 +184,6 @@ export default class AddNewPointView extends AbstractStatefulView {
   #priceInputElement = null;
   #saveButtonElement = null;
   #deleteButtonElement = null;
-  #selectedDestinationId = null;
   #datepickrFrom = null;
   #datepickrTo = null;
 
@@ -192,8 +194,7 @@ export default class AddNewPointView extends AbstractStatefulView {
     this.#handleFormSubmit = onFormSubmit;
     this.#handieDeleteClick = onDeleteClick;
 
-    this.#selectedDestinationId = this.#destinations[0].id;
-    const newPoint = createNewPoint(this.#selectedDestinationId);
+    const newPoint = createNewPoint();
 
     this._setState(AddNewPointView.parsePointToState(newPoint));
     this._restoreHandlers();
@@ -264,14 +265,17 @@ export default class AddNewPointView extends AbstractStatefulView {
 
   #destinationInputHandler = (evt) => {
     evt.preventDefault();
-    if (!this.#destinations.some((destination) => destination.name === evt.target.value)) {
+    const inputDestination = evt.target.value;
+    const foundDestination = this.#destinations.find(
+      (destination) => destination.name === inputDestination
+    );
+
+    if (inputDestination !== '' && !foundDestination) {
       return;
     }
-    const newDestination = this.#destinations.find(
-      (destination) => destination.name === evt.target.value
-    );
+
     this.updateElement({
-      destination: newDestination.id,
+      destination: foundDestination ? foundDestination.id : null,
     });
   };
 
