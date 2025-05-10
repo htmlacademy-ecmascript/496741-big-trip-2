@@ -1,5 +1,6 @@
 import { KeyCode, Mode, UpdateType, UserAction } from '../const';
 import { remove, render, replace } from '../framework/render.js';
+import { isSecondDateAfter } from '../utils/trip.js';
 import EditPointView from '../view/edit-point-view.js';
 import PointView from '../view/point-view.js';
 
@@ -58,7 +59,8 @@ export default class PointPresenter {
     }
 
     if(this.#mode === Mode.EDITING) {
-      replace(this.#editPointComponent, prevEditPointComponent);
+      replace(this.#pointComponent, prevEditPointComponent);
+      this.#mode = Mode.DEFAULT;
     }
 
     remove(prevPointComponent);
@@ -75,6 +77,41 @@ export default class PointPresenter {
       this.#editPointComponent.reset(this.#point);
       this.#replaceFormToCard();
     }
+  }
+
+  setSaving() {
+    if (this.#mode === Mode.EDITING) {
+      this.#editPointComponent.updateElement({
+        isDisabled: true,
+        isSaving: true,
+      });
+    }
+  }
+
+  setDeleting() {
+    if (this.#mode === Mode.EDITING) {
+      this.#editPointComponent.updateElement({
+        isDisabled: true,
+        isDeleting: true,
+      });
+    }
+  }
+
+  setAborting() {
+    if (this.#mode === Mode.DEFAULT) {
+      this.#pointComponent.shake();
+      return;
+    }
+
+    const resetFormState = () => {
+      this.#editPointComponent.updateElement({
+        isDisabled: false,
+        isSaving: false,
+        isDeleting: false,
+      });
+    };
+
+    this.#editPointComponent.shake(resetFormState);
   }
 
   #replaceCardToForm = () => {
@@ -108,12 +145,28 @@ export default class PointPresenter {
   };
 
   #handleFormSubmit = (update) => {
+    if (!this.#validatePoint(update)) {
+      this.setAborting();
+      return;
+    }
     this.#handleDataChange(
       UserAction.UPDATE_POINT,
       UpdateType.MINOR,
       update
     );
-    this.#replaceFormToCard();
+  };
+
+  #validatePoint = (point) => {
+    if (point.basePrice <= 0 || point.basePrice > 10000) {
+      return false;
+    }
+    if (!isSecondDateAfter(point.dateFrom, point.dateTo)) {
+      return false;
+    }
+    if (!point.destination) {
+      return false;
+    }
+    return true;
   };
 
   #handleDeleteClick = (point) => {

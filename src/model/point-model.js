@@ -1,15 +1,13 @@
-import { WAYPOINTS } from '../const';
-import { nanoid } from 'nanoid';
+import { WaypointType } from '../const';
 
-export default function createNewPoint(selectedDestinationId) {
+export default function createNewPoint() {
   return {
-    id: nanoid(),
     basePrice: 0,
-    dateFrom: '1970-01-01T00:00:00.000Z',
-    dateTo: '1970-01-01T00:00:00.000Z',
-    destination: selectedDestinationId,
+    dateFrom: '',
+    dateTo: '',
+    destination: null,
     isFavorite: false,
     offers: [],
-    type: WAYPOINTS[0]
+    type: WaypointType.FLIGHT,
   };
 }

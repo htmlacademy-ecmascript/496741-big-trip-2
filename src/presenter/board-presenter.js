@@ -1,13 +1,15 @@
-import { remove, render } from '../framework/render.js';
+import { remove, render, RenderPosition } from '../framework/render.js';
 import ListSortView from '../view/list-sort-view.js';
 import ListTripView from '../view/list-trip-view.js';
 import ListEmptyView from '../view/list-empty-view.js';
+import TripInfoView from '../view/trip-info-view.js';
 import PointPresenter from './point-presenter.js';
 import NewPointPresenter from './new-point-presenter.js';
-import { FilterType, SortType, UpdateType, UserAction } from '../const.js';
+import { FilterType, SortType, TimeLimit, UpdateType, UserAction } from '../const.js';
 import { sortDateUp, sortDescendingCost, sortDurationDown } from '../utils/trip.js';
 import { filter } from '../utils/filter.js';
 import LoadingView from '../view/loading-view.js';
+import UiBlocker from '../framework/ui-blocker/ui-blocker.js';
 
 export default class BoardPresenter {
   #boardContainer = null;
@@ -15,15 +17,20 @@ export default class BoardPresenter {
   #filterModel = null;
   #sortListComponent = null;
   #listEmptyComponent = null;
-
+  #tripInfoComponent = null;
   #pointListComponent = new ListTripView();
   #loadingComponent = new LoadingView();
 
+  #siteHeaderElement = document.querySelector('.trip-main');
   #pointPresenters = new Map();
   #newPointPresenter = null;
   #currentSortType = SortType.DAY;
   #filterType = FilterType.EVERYTHING;
   #isLoading = true;
+  #uiBlocker = new UiBlocker ({
+    lowerLimit: TimeLimit.LOWER_LIMIT,
+    upperLimit: TimeLimit.UPPER_LIMIT
+  });
 
   constructor({boardContainer, pointsModel, filterModel, onNewPointDestroy}) {
     this.#boardContainer = boardContainer;
@@ -81,18 +88,36 @@ export default class BoardPresenter {
     this.#pointPresenters.forEach((presenter) => presenter.resetView());
   };
 
-  #handleViewAction = (actionType, updateType, update) => {
+  #handleViewAction = async (actionType, updateType, update) => {
+    this.#uiBlocker.block();
+
     switch (actionType) {
       case UserAction.UPDATE_POINT:
-        this.#pointsModel.updatePoint(updateType, update);
+        this.#pointPresenters.get(update.id).setSaving();
+        try {
+          await this.#pointsModel.updatePoint(updateType, update);
+        } catch (error) {
+          this.#pointPresenters.get(update.id).setAborting();
+        }
         break;
       case UserAction.ADD_POINT:
-        this.#pointsModel.addPoint(updateType, update);
+        this.#newPointPresenter.setSaving();
+        try {
+          await this.#pointsModel.addPoint(updateType, update);
+        } catch(err) {
+          this.#newPointPresenter.setAborting();
+        }
         break;
       case UserAction.DELETE_POINT:
-        this.#pointsModel.deletePoint(updateType, update);
+        this.#pointPresenters.get(update.id).setDeleting();
+        try {
+          await this.#pointsModel.deletePoint(updateType, update);
+        } catch(err) {
+          this.#pointPresenters.get(update.id).setAborting();
+        }
         break;
     }
+    this.#uiBlocker.unblock();
   };
 
   #handleModelEvent = (updateType, data) => {
@@ -133,6 +158,18 @@ export default class BoardPresenter {
     render(this.#sortListComponent, this.#boardContainer);
   }
 
+  #renderTripInfo() {
+    let totalPrice = 0;
+    this.points.forEach((point) => {
+      totalPrice += point.basePrice;
+    });
+
+    this.#tripInfoComponent = new TripInfoView({
+      totalPrice,
+    });
+    render(this.#tripInfoComponent, this.#siteHeaderElement, RenderPosition.AFTERBEGIN);
+  }
+
   #renderPoint(point) {
     const pointPresenter = new PointPresenter({
       pointListContainer: this.#pointListComponent.element,
@@ -163,7 +200,7 @@ export default class BoardPresenter {
 
     remove(this.#sortListComponent);
     remove(this.#loadingComponent);
-
+    remove(this.#tripInfoComponent);
     if (this.#listEmptyComponent) {
       remove(this.#listEmptyComponent);
     }
@@ -183,7 +220,7 @@ export default class BoardPresenter {
       this.#renderListEmpty();
       return;
     }
-
+    this.#renderTripInfo();
     this.#renderSort();
 
     render(this.#pointListComponent, this.#boardContainer);
