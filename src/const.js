@@ -58,7 +58,6 @@ const Mode = {
 };
 
 const ErrorText = {
-  NO_WAYPOINTS: 'Click New Event to create your first point',
   NO_SERVER: 'Failed to load latest route information',
 };
 
@@ -70,7 +69,8 @@ const KeyCode = {
 const DateFormat = {
   DATE_AND_TIME: 'DD/MM/YY HH:mm',
   DATE: 'YYYY-MM-DD',
-  MONTH_AND_DAY: 'MMM DD',
+  MONTH_DAY: 'MMM DD',
+  DAY_MONTH: 'DD MMM',
   TIME: 'HH:mm'
 };
 

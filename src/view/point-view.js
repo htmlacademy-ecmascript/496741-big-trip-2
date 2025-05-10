@@ -34,7 +34,7 @@ function createPointTemplate(point, destinations, offers) {
 
   const dateFromDate = humanizeDate(dateFrom, DateFormat.DATE);
   const dateFromTime = humanizeDate(dateFrom, DateFormat.TIME);
-  const dateFromMonthAndDay = humanizeDate(dateFrom, DateFormat.MONTH_AND_DAY);
+  const dateFromMonthAndDay = humanizeDate(dateFrom, DateFormat.MONTH_DAY);
   const dateaToTime = humanizeDate(dateTo, DateFormat.TIME);
 
   const diffTime = findTimeInterval(dateFrom, dateTo);
