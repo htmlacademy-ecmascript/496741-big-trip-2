@@ -1,4 +1,3 @@
-const POINTS_COUNT = 5;
 const WaypointType = {
   TAXY: 'taxi',
   BUS: 'bus',
@@ -93,7 +92,6 @@ export {
   Method,
   TimeLimit,
   Url,
-  POINTS_COUNT,
   WaypointType,
   FilterType,
   NoPointsTextType,
