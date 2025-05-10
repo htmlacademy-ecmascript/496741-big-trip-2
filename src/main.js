@@ -5,8 +5,9 @@ import FilterModel from './model/filter-model.js';
 import NewPointButtonView from './view/new-point-button-view.js';
 import PointsApiService from './points-api-service.js';
 import { render } from './framework/render.js';
+import { getRandomString } from './utils/trip.js';
 
-const AUTHORIZATION = 'Basic vagiza_authorizati0n';
+const AUTHORIZATION = `Basic ${getRandomString()}`;
 const END_POINT = 'https://23.objects.htmlacademy.pro/big-trip';
 
 const siteMainElement = document.querySelector('.page-main');
