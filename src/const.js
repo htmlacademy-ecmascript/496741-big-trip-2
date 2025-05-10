@@ -86,6 +86,7 @@ const UpdateType = {
   MINOR: 'MINOR',
   MAJOR: 'MAJOR',
   INIT: 'INIT',
+  SERVER_ERROR: 'SERVER_ERROR',
 };
 
 export {

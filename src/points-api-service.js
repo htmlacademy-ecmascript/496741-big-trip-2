@@ -3,7 +3,8 @@ import { Method, Url } from './const.js';
 
 export default class PointsApiService extends ApiService {
   get points() {
-    return this._load({url: Url.POINTS}).then(ApiService.parseResponse);
+    return this._load({url: Url.POINTS})
+      .then(ApiService.parseResponse);
   }
 
   get destinations() {

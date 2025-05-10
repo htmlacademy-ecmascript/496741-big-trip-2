@@ -74,7 +74,7 @@ function createAddNewPointTemplate(point, destinations, allOffers) {
 
   const eventTypeItemsTemplate = createEventTypeItemsTemplate(type);
   const destinationOptionsTemplate = createDestinationOptionsTemplate(destinations);
-  const offersTemplate = createOffersTemplate(offer.offers, offers);
+  const offersTemplate = offer ? createOffersTemplate(offer.offers, offers) : '';
   const picturesTemplate = (destination && selectedDestination.pictures.length !== 0)
     ? createPicturesTemplate(selectedDestination.pictures) : '';
 
@@ -153,7 +153,7 @@ function createAddNewPointTemplate(point, destinations, allOffers) {
                 <button class="event__reset-btn" type="reset">Cancel</button>
               </header>
               <section class="event__details">
-                ${offer.offers.length !== 0 ? `<section class="event__section  event__section--offers">
+                ${(offer && offer.offers.length !== 0) ? `<section class="event__section  event__section--offers">
                   <h3 class="event__section-title  event__section-title--offers">Offers</h3>
 
                   <div class="event__available-offers">

@@ -9,6 +9,7 @@ import { FilterType, SortType, TimeLimit, UpdateType, UserAction } from '../cons
 import { sortDateUp, sortDescendingCost, sortDurationDown } from '../utils/trip.js';
 import { filter } from '../utils/filter.js';
 import LoadingView from '../view/loading-view.js';
+import FailedLoadView from '../view/failed-load-view.js';
 import UiBlocker from '../framework/ui-blocker/ui-blocker.js';
 
 export default class BoardPresenter {
@@ -20,6 +21,7 @@ export default class BoardPresenter {
   #tripInfoComponent = null;
   #pointListComponent = new ListTripView();
   #loadingComponent = new LoadingView();
+  #failedLoadComponent = new FailedLoadView();
 
   #siteHeaderElement = document.querySelector('.trip-main');
   #pointPresenters = new Map();
@@ -27,6 +29,7 @@ export default class BoardPresenter {
   #currentSortType = SortType.DAY;
   #filterType = FilterType.EVERYTHING;
   #isLoading = true;
+  #isServerFailed = false;
   #uiBlocker = new UiBlocker ({
     lowerLimit: TimeLimit.LOWER_LIMIT,
     upperLimit: TimeLimit.UPPER_LIMIT
@@ -138,6 +141,11 @@ export default class BoardPresenter {
         remove(this.#loadingComponent);
         this.#renderBoard();
         break;
+      case UpdateType.SERVER_ERROR:
+        this.#isLoading = false;
+        this.#isServerFailed = true;
+        this.#renderBoard();
+        break;
     }
   };
 
@@ -182,7 +190,11 @@ export default class BoardPresenter {
   }
 
   #renderLoading() {
-    render (this.#loadingComponent, this.#boardContainer);
+    render(this.#loadingComponent, this.#boardContainer);
+  }
+
+  #renderFailedLoad() {
+    render(this.#failedLoadComponent, this.#boardContainer);
   }
 
   #renderListEmpty() {
@@ -204,13 +216,21 @@ export default class BoardPresenter {
     if (this.#listEmptyComponent) {
       remove(this.#listEmptyComponent);
     }
-
+    if (this.#failedLoadComponent) {
+      remove(this.#failedLoadComponent);
+    }
     if (resetSortType) {
       this.#currentSortType = SortType.DAY;
     }
   }
 
   #renderBoard() {
+    if (this.#isServerFailed) {
+      remove(this.#loadingComponent);
+      this.#renderFailedLoad();
+      return;
+    }
+
     if (this.#isLoading) {
       this.#renderLoading();
       return;

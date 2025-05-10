@@ -47,6 +47,7 @@ function handleNewPointButtonClick() {
 
 filterPresenter.init();
 boardPresenter.init();
-pointsModel.init().finally(() => {
-  render(newPointButtonComponent, siteHeaderElement);
-});
+pointsModel.init()
+  .finally(() => {
+    render(newPointButtonComponent, siteHeaderElement);
+  });
