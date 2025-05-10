@@ -158,21 +158,20 @@ function createEditPointTemplate(point, destinations, offers) {
         </button>
       </header>
       <section class="event__details">
-      ${offer.offers.length !== 0 ? `<section class="event__section  event__section--offers">
+        ${offer.offers.length !== 0 ? `<section class="event__section  event__section--offers">
           <h3 class="event__section-title  event__section-title--offers">Offers</h3>
 
           <div class="event__available-offers">
             ${offersTemplate}
           </div>
         </section>` : ''}
-
-        <section class="event__section  event__section--destination">
+        ${destination ? `<section class="event__section  event__section--destination">
           <h3 class="event__section-title  event__section-title--destination">Destination</h3>
           <p class="event__destination-description">
-            ${destination ? selectedDestination.description : ''}
+            ${selectedDestination.description}
           </p>
           ${picturesTemplate}
-        </section>
+        </section>` : ''}
       </section>
     </form>
   </li>`;
