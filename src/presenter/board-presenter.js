@@ -1,7 +1,8 @@
-import { remove, render } from '../framework/render.js';
+import { remove, render, RenderPosition } from '../framework/render.js';
 import ListSortView from '../view/list-sort-view.js';
 import ListTripView from '../view/list-trip-view.js';
 import ListEmptyView from '../view/list-empty-view.js';
+import TripInfoView from '../view/trip-info-view.js';
 import PointPresenter from './point-presenter.js';
 import NewPointPresenter from './new-point-presenter.js';
 import { FilterType, SortType, TimeLimit, UpdateType, UserAction } from '../const.js';
@@ -16,10 +17,11 @@ export default class BoardPresenter {
   #filterModel = null;
   #sortListComponent = null;
   #listEmptyComponent = null;
-
+  #tripInfoComponent = null;
   #pointListComponent = new ListTripView();
   #loadingComponent = new LoadingView();
 
+  #siteHeaderElement = document.querySelector('.trip-main');
   #pointPresenters = new Map();
   #newPointPresenter = null;
   #currentSortType = SortType.DAY;
@@ -156,6 +158,18 @@ export default class BoardPresenter {
     render(this.#sortListComponent, this.#boardContainer);
   }
 
+  #renderTripInfo() {
+    let totalPrice = 0;
+    this.points.forEach((point) => {
+      totalPrice += point.basePrice;
+    });
+
+    this.#tripInfoComponent = new TripInfoView({
+      totalPrice,
+    });
+    render(this.#tripInfoComponent, this.#siteHeaderElement, RenderPosition.AFTERBEGIN);
+  }
+
   #renderPoint(point) {
     const pointPresenter = new PointPresenter({
       pointListContainer: this.#pointListComponent.element,
@@ -186,7 +200,7 @@ export default class BoardPresenter {
 
     remove(this.#sortListComponent);
     remove(this.#loadingComponent);
-
+    remove(this.#tripInfoComponent);
     if (this.#listEmptyComponent) {
       remove(this.#listEmptyComponent);
     }
@@ -206,7 +220,7 @@ export default class BoardPresenter {
       this.#renderListEmpty();
       return;
     }
-
+    this.#renderTripInfo();
     this.#renderSort();
 
     render(this.#pointListComponent, this.#boardContainer);

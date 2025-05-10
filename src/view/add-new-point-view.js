@@ -153,13 +153,13 @@ function createAddNewPointTemplate(point, destinations, allOffers) {
                 <button class="event__reset-btn" type="reset">Cancel</button>
               </header>
               <section class="event__details">
-                <section class="event__section  event__section--offers">
+              ${offer.offers.length !== 0 ? `<section class="event__section  event__section--offers">
                   <h3 class="event__section-title  event__section-title--offers">Offers</h3>
 
                   <div class="event__available-offers">
                     ${offersTemplate}
                   </div>
-                </section>
+                </section>` : ''}
 
                 <section class="event__section  event__section--destination">
                   <h3 class="event__section-title  event__section-title--destination">Destination</h3>
@@ -234,7 +234,9 @@ export default class AddNewPointView extends AbstractStatefulView {
     this.#deleteButtonElement = this.element.querySelector('.event__reset-btn');
 
     this.#typeInputElements.addEventListener('change', this.#typeInputHandler);
-    this.#offerInputElements.addEventListener('change', this.#offersChangeHandler);
+    if(this.#offerInputElements) {
+      this.#offerInputElements.addEventListener('change', this.#offersChangeHandler);
+    }
     this.#destinationInputElement.addEventListener('input', this.#destinationInputHandler);
     this.#priceInputElement.addEventListener('input', this.#priceInputHandler);
     this.#saveButtonElement.addEventListener('click', this.#formSubmitHandler);
