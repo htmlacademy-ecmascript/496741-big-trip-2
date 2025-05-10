@@ -65,7 +65,9 @@ function createEditPointTemplate(point, destinations, offers) {
     isDeleting
   } = point;
 
-  const {description, name, pictures} = destinations.find((itemDestination) => itemDestination.id === destination);
+  const selectedDestination = destination ? destinations.find(
+    (itemDestination) => itemDestination.id === destination
+  ) : null;
 
   const offer = offers.find((faundOffer) => faundOffer.type === type);
 
@@ -75,7 +77,8 @@ function createEditPointTemplate(point, destinations, offers) {
   const offersTemplate = createOffersTemplate(offer.offers, selectedOffers);
   const eventTypeItemsTemplate = createEventTypeItemsTemplate(type);
   const destinationOptionsTemplate = createDestinationOptionsTemplate(destinations);
-  const picturesTemplate = pictures.length !== 0 ? createPicturesTemplate(pictures) : '';
+  const picturesTemplate = (destination && selectedDestination.pictures.length !== 0)
+    ? createPicturesTemplate(selectedDestination.pictures) : '';
 
   return `<li class="trip-events__item">
     <form class="event event--edit" action="#" method="post">
@@ -104,7 +107,7 @@ function createEditPointTemplate(point, destinations, offers) {
             id="event-destination-${id}"
             type="text"
             name="event-destination"
-            value="${name}"
+            value="${destination ? selectedDestination.name : ''}"
             list="destination-list-${id}"
           >
           <datalist id="destination-list-${id}">
@@ -167,7 +170,7 @@ function createEditPointTemplate(point, destinations, offers) {
 
         <section class="event__section  event__section--destination">
           <h3 class="event__section-title  event__section-title--destination">Destination</h3>
-          <p class="event__destination-description">${description}</p>
+          <p class="event__destination-description">${destination ? selectedDestination.description : ''}</p>
           ${picturesTemplate}
         </section>
       </section>
@@ -270,14 +273,18 @@ export default class EditPointView extends AbstractStatefulView {
 
   #destinationInputHandler = (evt) => {
     evt.preventDefault();
-    if (!this.#destinations.some((destination) => destination.name === evt.target.value)) {
+    const inputDestination = evt.target.value;
+    console.log(inputDestination);
+    const faundDestination = this.#destinations.find(
+      (destination) => destination.name === inputDestination
+    );
+
+    if (inputDestination !== '' && !faundDestination) {
       return;
     }
-    const newDestination = this.#destinations.find(
-      (destination) => destination.name === evt.target.value
-    );
+
     this.updateElement({
-      destination: newDestination.id,
+      destination: faundDestination ? faundDestination.id : null,
     });
   };
 
