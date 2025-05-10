@@ -7,7 +7,6 @@ import 'flatpickr/dist/flatpickr.min.css';
 function createOffersTemplate(availableOffers, selectedOffers) {
   return availableOffers.map((offer) => {
     const { id, title, price } = offer;
-
     return `<div class="event__offer-selector">
     <input
       class="event__offer-checkbox  visually-hidden"
@@ -274,7 +273,6 @@ export default class EditPointView extends AbstractStatefulView {
   #destinationInputHandler = (evt) => {
     evt.preventDefault();
     const inputDestination = evt.target.value;
-    console.log(inputDestination);
     const faundDestination = this.#destinations.find(
       (destination) => destination.name === inputDestination
     );
