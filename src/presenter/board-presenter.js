@@ -167,13 +167,9 @@ export default class BoardPresenter {
   }
 
   #renderTripInfo() {
-    let totalPrice = 0;
-    this.points.forEach((point) => {
-      totalPrice += point.basePrice;
-    });
-
     this.#tripInfoComponent = new TripInfoView({
-      totalPrice,
+      points: this.points,
+      destinations: this.destinations,
     });
     render(this.#tripInfoComponent, this.#siteHeaderElement, RenderPosition.AFTERBEGIN);
   }

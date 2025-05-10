@@ -1,10 +1,29 @@
 import AbstractView from '../framework/view/abstract-view.js';
 
-function createTripInfoTemplate(totalPrice) {
+function createTripInfoTemplate(points, destinations) {
+  let totalPrice = 0;
+  points.forEach((point) => {
+    totalPrice += point.basePrice;
+  });
+
+  const firstDestination = points.length > 0 ? destinations.find(
+    (itemDestination) => itemDestination.id === points[0].destination
+  ) : null;
+  const secondDestination = points.length === 3 ? destinations.find(
+    (itemDestination) => itemDestination.id === points[1].destination
+  ) : null;
+  const lastDestination = points.length > 1 ? destinations.find(
+    (itemDestination) => itemDestination.id === points[points.length - 1].destination
+  ) : null;
+
   return `<section class="trip-main__trip-info  trip-info">
             <div class="trip-info__main">
-              <h1 class="trip-info__title">Amsterdam &mdash; Chamonix &mdash; Geneva</h1>
-
+              <h1 class="trip-info__title">
+                ${firstDestination ? firstDestination.name : ''}
+                ${secondDestination ? `&mdash; ${secondDestination.name}` : ''}
+                ${points.length > 3 ? '&mdash; ...' : ''}
+                ${lastDestination ? `&mdash; ${lastDestination.name}` : ''}
+              </h1>
               <p class="trip-info__dates">18&nbsp;&mdash;&nbsp;20 Mar</p>
             </div>
 
@@ -15,14 +34,16 @@ function createTripInfoTemplate(totalPrice) {
 }
 
 export default class TripInfoView extends AbstractView {
-  #totalPrice = null;
+  #points = [];
+  #destinations = [];
 
-  constructor({totalPrice}) {
+  constructor({points, destinations}) {
     super();
-    this.#totalPrice = totalPrice;
+    this.#points = points;
+    this.#destinations = destinations;
   }
 
   get template() {
-    return createTripInfoTemplate(this.#totalPrice);
+    return createTripInfoTemplate(this.#points, this.#destinations);
   }
 }
