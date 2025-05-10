@@ -7,16 +7,21 @@ const findTimeInterval = (dateFrom, dateTo) => {
   const date2 = dayjs(dateTo);
   let diff = '';
 
-  const diffDays = date2.diff(date1, 'day');//в днях
-  const diffHours = date2.diff(date1, 'hour'); // Разница в часах
-  const diffMinutes = date2.diff(date1, 'minute') % 60; // Оставшиеся минуты
+  const totalMinutes = date2.diff(date1, 'minute');
+  const diffDays = Math.floor(totalMinutes / (60 * 24));
+  const diffHours = Math.floor((totalMinutes % (60 * 24)) / 60);
+  const diffMinutes = totalMinutes % 60;
+
+  const daysStr = String(diffDays).padStart(2, '0');
+  const hoursStr = String(diffHours).padStart(2, '0');
+  const minutesStr = String(diffMinutes).padStart(2, '0');
 
   if (diffDays) {
-    diff = `${diffDays}D ${diffHours}H ${diffMinutes}M`;
+    diff = `${daysStr}D ${hoursStr}H ${minutesStr}M`;
   } else if (diffHours) {
-    diff = `${diffHours}H ${diffMinutes}M`;
+    diff = `${hoursStr}H ${minutesStr}M`;
   } else {
-    diff = `${diffMinutes}M`;
+    diff = `${minutesStr}M`;
   }
 
   return diff;
