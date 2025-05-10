@@ -45,7 +45,8 @@ function createOffersTemplate(availableOffers, selectedOffers) {
 function createPicturesTemplate(pictures) {
   return `<div class="event__photos-container">
             <div class="event__photos-tape">
-              ${pictures.map((picture) => `<img class="event__photo" src="${picture.src}" alt="${picture.description}">`).join('')}
+              ${pictures.map((picture) => `
+                <img class="event__photo" src="${picture.src}" alt="${picture.description}">`).join('')}
             </div>
           </div>`;
 }
@@ -147,7 +148,7 @@ function createAddNewPointTemplate(point, destinations, allOffers) {
                 </div>
 
                 <button class="event__save-btn  btn  btn--blue" type="submit" ${isDisabled ? 'disabled' : ''}>
-                  ${ isSaving ? 'Saving' : 'Save'}
+                  ${ isSaving ? 'Saving...' : 'Save'}
                 </button>
                 <button class="event__reset-btn" type="reset">Cancel</button>
               </header>
