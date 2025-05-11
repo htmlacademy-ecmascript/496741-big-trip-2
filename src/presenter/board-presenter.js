@@ -16,6 +16,7 @@ export default class BoardPresenter {
   #boardContainer = null;
   #pointsModel = null;
   #filterModel = null;
+  #handleNewPointDestroy = null;
   #sortListComponent = null;
   #listEmptyComponent = null;
   #tripInfoComponent = null;
@@ -39,14 +40,7 @@ export default class BoardPresenter {
     this.#boardContainer = boardContainer;
     this.#pointsModel = pointsModel;
     this.#filterModel = filterModel;
-
-    this.#newPointPresenter = new NewPointPresenter({
-      destinations: this.#pointsModel.destinations,
-      offers: this.#pointsModel.offers,
-      pointListContainer: this.#pointListComponent.element,
-      onDataChange: this.#handleViewAction,
-      onDestroy: onNewPointDestroy
-    });
+    this.#handleNewPointDestroy = onNewPointDestroy;
 
     this.#pointsModel.addObserver(this.#handleModelEvent);
     this.#filterModel.addObserver(this.#handleModelEvent);
@@ -83,11 +77,29 @@ export default class BoardPresenter {
   createPoint() {
     this.#currentSortType = SortType.DAY;
     this.#filterModel.setFilter(UpdateType.MAJOR, FilterType.EVERYTHING);
+    this.#newPointPresenter = new NewPointPresenter({
+      destinations: this.#pointsModel.destinations,
+      offers: this.#pointsModel.offers,
+      pointListContainer: this.#pointListComponent.element,
+      onDataChange: this.#handleViewAction,
+      onDestroy: () => {
+        this.#newPointPresenter = null;
+        this.#handleNewPointDestroy();
+        if (this.points.length === 0) {
+          this.#renderListEmpty();
+        }
+      }
+    });
     this.#newPointPresenter.init();
+    if (this.#listEmptyComponent) {
+      remove(this.#listEmptyComponent);
+    }
   }
 
   #handleModeChange = () => {
-    this.#newPointPresenter.destroy();
+    if (this.#newPointPresenter) {
+      this.#newPointPresenter.destroy();
+    }
     this.#pointPresenters.forEach((presenter) => presenter.resetView());
   };
 
@@ -104,7 +116,9 @@ export default class BoardPresenter {
         }
         break;
       case UserAction.ADD_POINT:
-        this.#newPointPresenter.setSaving();
+        if (this.#newPointPresenter) {
+          this.#newPointPresenter.setSaving();
+        }
         try {
           await this.#pointsModel.addPoint(updateType, update);
         } catch(err) {
@@ -170,6 +184,7 @@ export default class BoardPresenter {
     this.#tripInfoComponent = new TripInfoView({
       points: this.#pointsModel.points,
       destinations: this.destinations,
+      offers: this.offers,
     });
     render(this.#tripInfoComponent, this.#siteHeaderElement, RenderPosition.AFTERBEGIN);
   }
@@ -202,7 +217,9 @@ export default class BoardPresenter {
   }
 
   #clearBoard({resetSortType = false} = {}) {
-    this.#newPointPresenter.destroy();
+    if (this.#newPointPresenter) {
+      this.#newPointPresenter.destroy();
+    }
     this.#pointPresenters.forEach((presenter) => presenter.destroy());
     this.#pointPresenters.clear();
 
@@ -232,16 +249,17 @@ export default class BoardPresenter {
       return;
     }
 
-    if (this.points.length === 0) {
-      this.#renderListEmpty();
-      return;
-    }
-    this.#renderTripInfo();
     this.#renderSort();
 
     render(this.#pointListComponent, this.#boardContainer);
     this.points.forEach((point) => {
       this.#renderPoint(point);
     });
+
+    if (this.points.length === 0 && !this.#newPointPresenter) {
+      this.#renderListEmpty();
+    } else {
+      this.#renderTripInfo();
+    }
   }
 }

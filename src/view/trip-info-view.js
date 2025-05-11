@@ -2,10 +2,17 @@ import { DateFormat } from '../const.js';
 import AbstractView from '../framework/view/abstract-view.js';
 import { humanizeDate, sortDateUp } from '../utils/trip.js';
 
-function createTripInfoTemplate(points, destinations) {
+function createTripInfoTemplate(points, destinations, offers) {
   let totalPrice = 0;
   points.forEach((point) => {
     totalPrice += point.basePrice;
+    const offersForType = offers.find((offer) => offer.type === point.type);
+    point.offers.forEach((selectedOfferId) => {
+      const foundOffer = offersForType.offers.find((offer) => offer.id === selectedOfferId);
+      if (foundOffer) {
+        totalPrice += foundOffer.price;
+      }
+    });
   });
 
   const sortedPoints = [...points].sort(sortDateUp);
@@ -57,14 +64,16 @@ function createTripInfoTemplate(points, destinations) {
 export default class TripInfoView extends AbstractView {
   #points = [];
   #destinations = [];
+  #offers = [];
 
-  constructor({points, destinations}) {
+  constructor({points, destinations, offers}) {
     super();
     this.#points = points;
     this.#destinations = destinations;
+    this.#offers = offers;
   }
 
   get template() {
-    return createTripInfoTemplate(this.#points, this.#destinations);
+    return createTripInfoTemplate(this.#points, this.#destinations, this.#offers);
   }
 }
