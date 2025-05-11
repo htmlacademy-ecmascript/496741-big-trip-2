@@ -35,13 +35,15 @@ function isPastDate(targetDate) {
   return dayjs().isAfter(dayjs(targetDate));
 }
 
-const sortDescendingCost = (a, b) => b.basePrice - a.basePrice;
+const sortDescendingCost = (firstPoint, secondPoint) =>
+  secondPoint.basePrice - firstPoint.basePrice;
 
-const sortDateUp = (a, b) => dayjs(a.dateFrom).valueOf() - dayjs(b.dateFrom).valueOf();
+const sortDateUp = (firstPoint, secondPoint) =>
+  dayjs(firstPoint.dateFrom).valueOf() - dayjs(secondPoint.dateFrom).valueOf();
 
-const sortDurationDown = (a, b) => {
-  const durationA = dayjs(a.dateTo).diff(dayjs(a.dateFrom), 'day');
-  const durationB = dayjs(b.dateTo).diff(dayjs(b.dateFrom), 'day');
+const sortDurationDown = (firstPoint, secondPoint) => {
+  const durationA = dayjs(firstPoint.dateTo).diff(dayjs(firstPoint.dateFrom), 'day');
+  const durationB = dayjs(secondPoint.dateTo).diff(dayjs(secondPoint.dateFrom), 'day');
   return durationB - durationA;
 };
 

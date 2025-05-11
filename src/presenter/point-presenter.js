@@ -163,10 +163,7 @@ export default class PointPresenter {
     if (!isSecondDateAfter(point.dateFrom, point.dateTo)) {
       return false;
     }
-    if (!point.destination) {
-      return false;
-    }
-    return true;
+    return (!!point.destination);
   };
 
   #handleDeleteClick = (point) => {
