@@ -2,21 +2,39 @@ import { findTimeInterval, humanizeDate } from '../utils/trip.js';
 import { DateFormat } from '../const.js';
 import AbstractView from '../framework/view/abstract-view.js';
 
-function createPointTemplate(point, destinations) {
+function createOffersTemplate(offers) {
+  return offers.map((offer) => {
+    const { title, price } = offer;
+    return `<li class="event__offer">
+          <span class="event__offer-title">${title}</span>
+          &plus;&euro;&nbsp;
+          <span class="event__offer-price">${price}</span>
+        </li>`;
+  }).join('');
+}
+
+function createPointTemplate(point, destinations, offers) {
   const {
     basePrice,
     dateFrom,
     dateTo,
     destination,
     isFavorite,
+    offers: selectedOffers,
     type,
   } = point;
 
-  const {name} = destinations.find((itemDestination) => itemDestination.id === destination);
+  const offer = offers.find((foundOffer) => foundOffer.type === type);
+
+  const pointOffers = offer.offers.filter((foundOffer) => selectedOffers.includes(foundOffer.id));
+  const offersTemplate = createOffersTemplate(pointOffers);
+  const {name} = destinations.find(
+    (itemDestination) => itemDestination.id === destination
+  );
 
   const dateFromDate = humanizeDate(dateFrom, DateFormat.DATE);
   const dateFromTime = humanizeDate(dateFrom, DateFormat.TIME);
-  const dateFromMonthAndDay = humanizeDate(dateFrom, DateFormat.MONTH_AND_DAY);
+  const dateFromMonthAndDay = humanizeDate(dateFrom, DateFormat.MONTH_DAY);
   const dateaToTime = humanizeDate(dateTo, DateFormat.TIME);
 
   const diffTime = findTimeInterval(dateFrom, dateTo);
@@ -42,11 +60,7 @@ function createPointTemplate(point, destinations) {
       </p>
       <h4 class="visually-hidden">Offers:</h4>
       <ul class="event__selected-offers">
-        <li class="event__offer">
-          <span class="event__offer-title">Order Uber</span>
-          &plus;&euro;&nbsp;
-          <span class="event__offer-price">${basePrice}</span>
-        </li>
+        ${offersTemplate}
       </ul>
       <button class="event__favorite-btn ${isFavorite ? 'event__favorite-btn--active' : ''}" type="button">
         <span class="visually-hidden">Add to favorite</span>

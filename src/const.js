@@ -1,9 +1,26 @@
-const POINTS_COUNT = 5;
-const WAYPOINTS = ['taxi', 'bus', 'train', 'ship', 'drive', 'flight', 'check-in', 'sightseeing', 'restaurant'];
+const WaypointType = {
+  TAXY: 'taxi',
+  BUS: 'bus',
+  TRAYN: 'train',
+  SHIP: 'ship',
+  DRIVE: 'drive',
+  FLIGHT: 'flight',
+  CHECK_IN: 'check-in',
+  SIGHTSEEING: 'sightseeing',
+  RESTAURANT: 'restaurant'
+};
 
 const Method = {
   GET: 'GET',
   PUT: 'PUT',
+  POST: 'POST',
+  DELETE: 'DELETE',
+};
+
+
+const TimeLimit = {
+  LOWER_LIMIT: 350,
+  UPPER_LIMIT: 1000,
 };
 
 const Url = {
@@ -40,7 +57,6 @@ const Mode = {
 };
 
 const ErrorText = {
-  NO_WAYPOINTS: 'Click New Event to create your first point',
   NO_SERVER: 'Failed to load latest route information',
 };
 
@@ -52,7 +68,8 @@ const KeyCode = {
 const DateFormat = {
   DATE_AND_TIME: 'DD/MM/YY HH:mm',
   DATE: 'YYYY-MM-DD',
-  MONTH_AND_DAY: 'MMM DD',
+  MONTH_DAY: 'MMM DD',
+  DAY_MONTH: 'DD MMM',
   TIME: 'HH:mm'
 };
 
@@ -68,13 +85,14 @@ const UpdateType = {
   MINOR: 'MINOR',
   MAJOR: 'MAJOR',
   INIT: 'INIT',
+  SERVER_ERROR: 'SERVER_ERROR',
 };
 
 export {
   Method,
+  TimeLimit,
   Url,
-  POINTS_COUNT,
-  WAYPOINTS,
+  WaypointType,
   FilterType,
   NoPointsTextType,
   ErrorText,

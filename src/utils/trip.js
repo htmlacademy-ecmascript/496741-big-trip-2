@@ -5,11 +5,26 @@ const humanizeDate = (date, dateFormat) => date ? dayjs(date).format(dateFormat)
 const findTimeInterval = (dateFrom, dateTo) => {
   const date1 = dayjs(dateFrom);
   const date2 = dayjs(dateTo);
+  let diff = '';
 
-  const diffHours = date2.diff(date1, 'hour'); // Разница в часах
-  const diffMinutes = date2.diff(date1, 'minute') % 60; // Оставшиеся минуты
+  const totalMinutes = date2.diff(date1, 'minute');
+  const diffDays = Math.floor(totalMinutes / (60 * 24));
+  const diffHours = Math.floor((totalMinutes % (60 * 24)) / 60);
+  const diffMinutes = totalMinutes % 60;
 
-  return diffHours ? `${diffHours}H ${diffMinutes}M` : `${diffMinutes}M`;
+  const daysStr = String(diffDays).padStart(2, '0');
+  const hoursStr = String(diffHours).padStart(2, '0');
+  const minutesStr = String(diffMinutes).padStart(2, '0');
+
+  if (diffDays) {
+    diff = `${daysStr}D ${hoursStr}H ${minutesStr}M`;
+  } else if (diffHours) {
+    diff = `${hoursStr}H ${minutesStr}M`;
+  } else {
+    diff = `${minutesStr}M`;
+  }
+
+  return diff;
 };
 
 function isFutureDate(targetDate) {
@@ -30,6 +45,20 @@ const sortDurationDown = (a, b) => {
   return durationB - durationA;
 };
 
+function isSecondDateAfter(firstDate, secondDate) {
+  return dayjs(secondDate).isAfter(dayjs(firstDate));
+}
+
+function getRandomString(length = 10) {
+  const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+  let result = '';
+  for (let i = 0; i < length; i++) {
+    const randomIndex = Math.floor(Math.random() * chars.length);
+    result += chars[randomIndex];
+  }
+  return result;
+}
+
 export {
   humanizeDate,
   findTimeInterval,
@@ -37,5 +66,7 @@ export {
   isPastDate,
   sortDescendingCost,
   sortDateUp,
-  sortDurationDown
+  sortDurationDown,
+  isSecondDateAfter,
+  getRandomString,
 };

@@ -1,5 +1,6 @@
 import { KeyCode, UpdateType, UserAction } from '../const.js';
 import { remove, render, RenderPosition } from '../framework/render.js';
+import { isSecondDateAfter } from '../utils/trip.js';
 import AddNewPointView from '../view/add-new-point-view.js';
 
 export default class NewPointPresenter {
@@ -49,14 +50,48 @@ export default class NewPointPresenter {
     document.removeEventListener('keydown', this.#escKeyDownHandler);
   }
 
+  setSaving() {
+    this.#addNewPointComponent.updateElement({
+      isDisabled: true,
+      isSaving: true,
+    });
+  }
+
+  setAborting() {
+    const resetFormState = () => {
+      this.#addNewPointComponent.updateElement({
+        isDisabled: false,
+        isSaving: false,
+      });
+    };
+
+    this.#addNewPointComponent.shake(resetFormState);
+  }
+
   #handleFormSubmit = (point) => {
+    if (!this.#validatePoint(point)) {
+      this.setAborting();
+      return;
+    }
+
     this.#handleDataChange(
       UserAction.ADD_POINT,
       UpdateType.MINOR,
       point,
     );
+  };
 
-    this.destroy();
+  #validatePoint = (point) => {
+    if (point.basePrice <= 0 || point.basePrice > 10000) {
+      return false;
+    }
+    if (!isSecondDateAfter(point.dateFrom, point.dateTo)) {
+      return false;
+    }
+    if (!point.destination) {
+      return false;
+    }
+    return true;
   };
 
   #handleDeleteClick = () => {
