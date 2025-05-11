@@ -51,10 +51,12 @@ export default class NewPointPresenter {
   }
 
   setSaving() {
-    this.#addNewPointComponent.updateElement({
-      isDisabled: true,
-      isSaving: true,
-    });
+    if (this.#addNewPointComponent) {
+      this.#addNewPointComponent.updateElement({
+        isDisabled: true,
+        isSaving: true,
+      });
+    }
   }
 
   setAborting() {
